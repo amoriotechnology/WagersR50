@@ -1,0 +1,15 @@
+{
+    "name": "user/wagers_r49v2",
+    "autoload": {
+        "psr-4": {
+            "User\\WagersR49v2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yokeshdev01",
+            "email": "yokesh@amoriotech.com"
+        }
+    ],
+    "require": {}
+}
