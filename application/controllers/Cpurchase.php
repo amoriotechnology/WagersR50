@@ -671,23 +671,23 @@ public function bulk_payment(){
   #==============expenses_delete==============#
 
   public function purchase_delete_form($purchase_id)
-  {
+  { 
       $data['purchase_id'] = $this->input->post('purchase_id',TRUE);
-      
-
-    //   print_r( $purchase_id);
 
       $result = $this->db->delete('product_purchase', array('purchase_id' => $purchase_id)); 
 
       $result1 = $this->db->delete('product_purchase_details', array('purchase_id' => $purchase_id)); 
 
-    //   die();
-    //   if ($result == true) {
-    //      $this->session->set_userdata(array('message'=>display('successfully_delete')));
-    //   }
-    $this->session->set_flashdata('show', display('successfully_delete'));
+      logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $purchase_id, '', $this->session->userdata('userName'), 'Delete Expense', 'Expenses', 'Expense has been deleted successfully', 'Delete', date('m-d-Y'));
 
-      redirect('Cpurchase/manage_purchase');
+      if ($result && $result1) {
+        $this->session->set_flashdata('show', display('successfully_delete'));
+
+        redirect('Cpurchase/manage_purchase');
+    } else {
+        $this->session->set_flashdata('error', display('deletion_failed')); 
+    }
+
   }
   
   
@@ -1770,12 +1770,6 @@ public function uploadCsv_Serviceprovider_second()
         $CI->load->model('Purchases');
         $data=$CI->Purchases->purchase_entry();
         echo json_encode($data);
-
-
-
-         
-    
-
     }
 
 

@@ -1287,6 +1287,8 @@ $query=$this->db->query($sql);
 $row=$query->result_array();
 $user_id=$row[0]['user_id']; 
 $unique_id=$row[0]['unique_id']; 
+$username = $row[0]['username'];  
+$this->session->set_userdata('userName',$username);  
 $this->session->set_userdata('unique_id',$unique_id); 
 $query1='select * from company_information where company_id="'.$row[0]['cid'].'"';
 
@@ -1499,6 +1501,7 @@ $sale=array();$product=array();
     #===============Logout=======#
 
     public function logout() {
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Logout', 'Users Logout', 'Logout Successfully', 'Logout', date('m-d-Y'));
         if ($this->auth->logout())
             $this->output->set_header("Location: " . base_url() . 'Admin_dashboard/login', TRUE, 302);
     }

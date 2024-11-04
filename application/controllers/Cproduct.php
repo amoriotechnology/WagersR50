@@ -145,9 +145,8 @@ class Cproduct extends CI_Controller {
         $result2 = $this->db->delete('product_details', array('product_id' => $product_id)); 
 
 
-
-
         if ($result == true) {
+            logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $product_id, '', $this->session->userdata('company_name'), 'Delete Product', 'Product', 'Product has been deleted successfully', 'Delete', date('m-d-Y'));
            $this->session->set_userdata(array('message'=>display('successfully_delete')));
         }
         redirect('Cproduct/manage_product');
@@ -420,7 +419,9 @@ public function insert_product_from_expense(){
         $row = $q->row_array();
 
    if(!empty($row['product_id'])){
-      
+
+    logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $product_id, '', $this->session->userdata('company_name'), 'Edit Product', 'Product', 'Product has been update successfully', 'Update', date('m-d-Y'));
+
          $this->db->where('product_id',$product_id);
     
         $this->db->delete('supplier_product');
@@ -429,7 +430,9 @@ public function insert_product_from_expense(){
   // echo $this->db->last_query();
   }   
     else{
-  
+ 
+ logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'New Product', 'Product', 'Product has been added successfully', 'Add', date('m-d-Y'));
+
  $this->db->insert('supplier_product', $supp_prd);
  // echo $this->db->last_query();
  

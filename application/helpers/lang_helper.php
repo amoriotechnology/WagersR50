@@ -90,5 +90,102 @@ if (!function_exists('alpha_space')) {
         return (bool) preg_match('/^[a-zA-Z ]+$/', $str);
     }
 }
+
+// Client Ip Address
+if(!function_exists('getClientIp')){
+    function getClientIp() {
+        $ip = '';
+        if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+}
+
+
+// Log Common Insert Function
+if (!function_exists('logEntry')) {
+    function logEntry($user_id, $admin_id, $field_id=null, $hint=null, $username, $user_actions, $module, $details, $status, $c_date) {
+        $ci = & get_instance();
+        $ci->load->database();
+        $ci->load->library('user_agent');
+        
+        $user_ipaddress = getClientIp();
+
+        date_default_timezone_set('Asia/Kolkata');
+        $current_time = new DateTime();
+        $formatted_time = $current_time->format('H:i:s');
+        $platform = $ci->agent->platform();
+        $browser = $ci->agent->browser();
+        // $user_location = getUserLocation($user_ipaddress);
+
+        // if ($user_location === 'India') {
+        //     date_default_timezone_set('Asia/Kolkata');
+        //     $current_time = new DateTime();
+        //     $formatted_time = $current_time->format('H:i:s');
+        // } elseif ($user_location === 'USA') {
+        //     date_default_timezone_set('America/New_York'); 
+        //     $current_time = new DateTime();
+        //     $formatted_time = $current_time->format('h:i A'); 
+        // } else {
+        //     date_default_timezone_set('UTC');
+        //     $current_time = new DateTime();
+        //     $formatted_time = $current_time->format('Y-m-d H:i:s');
+        // }
+
+        $data = array(
+            'user_id' => $user_id,
+            'admin_id' => $admin_id,
+            'field_id' => $field_id,
+            'hint' => $hint,
+            'username' => $username,
+            'user_ipaddress' => $user_ipaddress,
+            'user_platform' => $platform,
+            'user_browser' => $browser,
+            'user_actions' => $user_actions,
+            'module' => $module,
+            'details' => $details,
+            'status' => $status,
+            'c_date' => $c_date,
+            'c_time' => $formatted_time, 
+        );
+        $res = $ci->db->insert('log_entry', $data);
+        // echo $ci->db->last_query(); die;
+        return true;
+    }
+}
+
+
+// Function to fetch geolocation based on IP address
+if (!function_exists('getUserLocation')) {
+    function getUserLocation($user_ipaddress) 
+    {
+        $apiKey = '374225fdf6a54fcea7cfdb19e643ded3';
+        $url = "https://api.ipgeolocation.io/ipgeo?apiKey=$apiKey&ip=$user_ipaddress";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        // var_dump(curl_error($ch));exit;
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return null;
+        }
+        curl_close($ch);
+        $data = json_decode($response, true);
+
+        if (isset($data['country_name'])) {
+            return $data['country_name']; 
+        } else {
+            return null; 
+        }
+    }
+}
+
  
 

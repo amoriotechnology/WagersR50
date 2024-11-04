@@ -270,7 +270,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                "extend": "colvis",
-               "className": "btn-sm"
+               "className": "btn-sm",
             }
         ]
     });

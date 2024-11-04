@@ -2730,5 +2730,22 @@ $userId = $this->session->userdata('user_id');
         redirect(base_url('Cweb_setting/mail_setting'));
     }
 
+    // Logs Views 
+    public function viewLogs()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+
+        // $insertdata = $CI->Web_settings->insertDateforSchedule();
+        // $alldata = $CI->Web_settings->insertDateforScheduleStatus();
+
+        $data = array(
+            'title' => 'Logs',
+        );
+
+        $content = $this->load->view('web_setting/logs', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
 
 }
