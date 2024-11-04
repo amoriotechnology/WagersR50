@@ -224,7 +224,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
 });
 
 // Delete Employee List Data - Madhu
-function deleteTimesheetdata(id) 
+function deleteTimesheetdata(id, month) 
 {
     var succalert = '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>';
     
@@ -237,7 +237,7 @@ function deleteTimesheetdata(id)
                 type: "POST",
                 dataType: "json",
                 url: "<?php echo base_url(); ?>chrm/timesheet_delete",
-                data: {'<?php echo $this->security->get_csrf_token_name(); ?>': csrfHash, id: id},
+                data: {'<?php echo $this->security->get_csrf_token_name(); ?>': csrfHash, id: id, month: month},
                 success: function(response) {
                     console.log(response, "response");
                     if (response.status === 'success') {

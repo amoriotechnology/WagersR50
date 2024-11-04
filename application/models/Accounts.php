@@ -57,6 +57,9 @@ class Accounts extends CI_Model {
         if ($query > 0) {
             return FALSE;
         } else {
+
+            logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Add Tax', 'Taxes', 'Tax has been added Successfully', 'Add', date('m-d-Y'));
+
             $this->db->insert('tax_information', $data);
             return true;
         }

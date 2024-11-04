@@ -49,7 +49,7 @@ public function statetaxreport($employee_name=null,$url,$date=null)
         $end_date = $dates[1];
         $this->db->where("d.cheque_date BETWEEN '$start_date' AND '$end_date'");
     }
-  if ($employee_name !== 'All' && $employee_name !== null) {
+   if ($employee_name !== 'All' && $employee_name !== null) {
         $trimmed_emp_name = trim($employee_name);
         $this->db->group_start();
         $this->db->like("TRIM(CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name))", $trimmed_emp_name);
@@ -4579,6 +4579,93 @@ public function getTotalmanagetimesheetlist($search, $emp_name = 'All')
     }
     return $query->num_rows();
 }
+
+// Logs Entry 
+// Paginated Federal income tax
+public function getPaginatedLogs($limit, $offset, $orderField, $orderDirection, $search, $date = null, $status = 'All', $decodedId)
+{
+    if ($date) {
+        $dates = explode(' to ', $date);
+        $start_date = $dates[0];
+        $end_date = $dates[1];
+        $this->db->where("c_date BETWEEN '$start_date' AND '$end_date'");
+    }
+    if ($status !== 'All' && $status !== null) {
+        $this->db->group_start();
+        $this->db->like("status", $status);
+        $this->db->group_end();
+    }
+    $subquery .= ")";
+    $this->db->select('*');
+    $this->db->from('log_entry');
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->like("user_id", $search);
+        $this->db->or_like("admin_id", $search);
+        $this->db->or_like("field_id", $search);
+        $this->db->or_like("hint", $search);
+        $this->db->or_like("username", $search);
+        $this->db->or_like("user_ipaddress", $search);
+        $this->db->or_like("user_actions", $search);
+        $this->db->or_like("module", $search);
+        $this->db->or_like("details", $search);
+        $this->db->or_like("status", $search);
+        $this->db->or_like("c_date", $search);
+        $this->db->or_like("c_time", $search);
+        $this->db->group_end();
+    }
+    $this->db->where("user_id", $decodedId);
+    $this->db->limit($limit, $offset);
+    $this->db->order_by($orderField, $orderDirection);
+    $query = $this->db->get();
+    if ($query === false) {
+        return false;
+    }
+    return $query->result_array();
+}
+    // Total Logs 
+    public function getTotalLogs($search, $date, $status = 'All', $decodedId)
+    {
+        if ($date) {
+            $dates = explode(' to ', $date);
+            $start_date = $dates[0];
+            $end_date = $dates[1];
+            $this->db->where("c_date BETWEEN '$start_date' AND '$end_date'");
+        }
+        if ($status !== 'All' && $status !== null) {
+            $this->db->group_start();
+            $this->db->like("status", $status);
+            $this->db->group_end();
+        }
+        $subquery .= ")";
+        $this->db->select('*');
+        $this->db->from('log_entry');
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("user_id", $search);
+            $this->db->or_like("admin_id", $search);
+            $this->db->or_like("field_id", $search);
+            $this->db->or_like("hint", $search);
+            $this->db->or_like("username", $search);
+            $this->db->or_like("user_ipaddress", $search);
+            $this->db->or_like("user_actions", $search);
+            $this->db->or_like("module", $search);
+            $this->db->or_like("details", $search);
+            $this->db->or_like("status", $search);
+            $this->db->or_like("c_date", $search);
+            $this->db->or_like("c_time", $search);
+            $this->db->group_end();
+        }
+        $this->db->where("user_id", $decodedId);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by($orderField, $orderDirection);
+        $query = $this->db->get();
+        // echo $this->db->last_query(); die();
+        if ($query === false) {
+            return false;
+        }
+        return $query->num_rows();
+    }
 
 
 }

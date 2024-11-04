@@ -562,10 +562,6 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
 
                               <?php if (!empty($selected_state_tax)) { ?>
 <?php if ($hourly || $weekly ||  $biweekly){  ?>
-   
-   
-<?php //if ($infoemployee[0]['payroll_type'] == 'Hourly'  ||  $infoemployee[0]['payroll_type'] == 'SalesCommission' || $infoemployee[0]['sales_partner'] == 'Sales_Partner' ) { ?>
-
 <tr>
     <td style="text-align:left;">New Jersey-Income tax</td>
     <td></td>
@@ -573,19 +569,16 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
     <td class="ytd"><?php echo round($OVhourly, 2); ?>
 </td>
 </tr>
-
-
-
-<?php }//} ?>
+<?php } ?>
 
 <?php }else{ ?>
-<?php foreach ($selected_state_tax as $k => $v) { ?>
-    <?php if ($v) { 
-        $split = explode('-', $k);
-        $title = str_replace("'employee_", '', $split[0]);
-        $rep = str_replace("'", '', $split[1]);
-        $rep2 = isset($split[2]) ? str_replace("'", '', $split[2]) : '';
-    ?>
+<?php foreach ($selected_state_tax as $k => $v) {  ?>
+   <?php if ($v) { 
+      $split = explode('-', $k);
+      $title = str_replace("'employee_", '', $split[0]);
+      $rep = str_replace("'", '', $split[1]);
+      $rep2 = isset($split[2]) ? str_replace("'", '', $split[2]) : '';
+   ?>
         <tr class="avoid-page-break">
             <td style="border: none;"></td>
             <td style="border: none;"></td>
@@ -607,7 +600,7 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
  
 
 
-<?php  foreach($selected_state_tax as $k=>$v){
+<?php foreach($selected_state_tax as $k=>$v){
                                  if($v){
                                  $split=explode('-',$k);
                                    $title=str_replace("'employee_",'',$split[0]);
@@ -626,18 +619,10 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
                               <?php  } }?>   
 
 
-
-
- 
-
-
- 
-
-
                               <?php foreach($selected_local_tax as $k=>$v){
                                  if($v){
                                  $split=explode('-',$k);
-                                   $title=str_replace("'employee_",'',$split[0]);
+                                 $title=str_replace("'employee_",'',$split[0]);
                                  $rep=str_replace("'",'',$split[1]);
                                  $rep2='';
                                  if($split[2]){
