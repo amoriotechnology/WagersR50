@@ -46,50 +46,47 @@
 <style>
 
 .btnclr{
-       background-color:<?php echo $setting_detail[0]['button_color']; ?>;
-       color: white;
-
-   }
+   background-color:<?php echo $setting_detail[0]['button_color']; ?>;
+   color: white;
+}
 .table td{
    text-align:center;
 }
 
-   .table{
+.table{
    display: block;
    overflow-x: auto;
-   }
-   
-      .logo-9 i{
-    font-size:80px;
-    position:absolute;
-    z-index:0;
-    text-align:center;
-    width:100%;
-    left:0;
-    top:-10px;
-    color:#34495e;
-    -webkit-animation:ring 2s ease infinite;
-    animation:ring 2s ease infinite;
 }
+   
+.logo-9 i{
+   font-size:80px;
+   position:absolute;
+   z-index:0;
+   text-align:center;
+   width:100%;
+   left:0;
+   top:-10px;
+   color:#34495e;
+   -webkit-animation:ring 2s ease infinite;
+   animation:ring 2s ease infinite;
+}
+
 .logo-9 h1{
-    font-family: 'Lora', serif;
-    font-weight:600;
-    text-transform:uppercase;
-    font-size:40px;
-    position:relative;
-    z-index:1;
-    color:#e74c3c;
-    text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff;
+   font-family: 'Lora', serif;
+   font-weight:600;
+   text-transform:uppercase;
+   font-size:40px;
+   position:relative;
+   z-index:1;
+   color:#e74c3c;
+   text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff;
 }
-   
-   
-  
-   .logo-9{
-    position:relative;
+
+.logo-9{
+   position:relative;
 } 
    
-   /*//side*/
-   
+/*//side*/   
 .bar {
   float: left;
   width: 25px;
@@ -98,11 +95,9 @@
   background-color: #4b9cdb;
 }
 
-
 .load-10 .bar {
   animation: loadingJ 2s cubic-bezier(0.17, 0.37, 0.43, 0.67) infinite;
 }
-
 
 @keyframes loadingJ {
   0%,
@@ -118,16 +113,11 @@
 }
 </style>
 
-
-
-
-
-
 <div class="content-wrapper">
    <section class="content-header">
       <div class="header-icon">
          <figure class="one">
-               <img src="<?php echo base_url()  ?>asset/images/salesreport.png"  class="headshotphoto" style="height:50px;" />
+            <img src="<?php echo base_url()  ?>asset/images/salesreport.png"  class="headshotphoto" style="height:50px;" />
       </div>
       
       

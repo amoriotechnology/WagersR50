@@ -7,9 +7,7 @@
          </figure>
       </div>
       <div class="header-title">
-         <div class="logo-holder logo-9">
-         <h1><?php echo ('Manage Time Sheet') ?></h1>
-         </div>
+         <div class="logo-holder logo-9"><h1>Manage Time Sheet</h1></div>
             <ol class="breadcrumb" style=" border: 3px solid #d7d4d6;" >
                <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                <li><a href="#"><?php echo display('hrm') ?></a></li>
@@ -22,6 +20,7 @@
          </ol>
       </div>
    </section>
+   
    <section class="content">
       <?php
          $message = $this->session->userdata('message');
@@ -41,6 +40,7 @@
       </div>
       <?php $this->session->unset_userdata('error_message');}?>
       <div class="error_display mb-2"></div>
+
       <div class="panel panel-bd lobidrag">
          <div class="panel-heading" style="height: 60px;border: 3px solid #D7D4D6;">
             <div class="col-sm-12" style="height:69px;">
@@ -52,8 +52,8 @@
                 <a href="<?php echo base_url('Chrm/add_timesheet') ?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a> 
 
                 <?php break;}} 
-                if($_SESSION['u_type'] ==2){ ?>
-
+                    if($_SESSION['u_type'] == 2) { 
+                ?>
                 <a href="<?php echo base_url('Chrm/add_timesheet') ?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a>
                 <?php  } ?>
                 </div>
@@ -72,6 +72,7 @@
                 </div>
             </div>
          </div>
+         
          <div class="row">
             <div class="col-sm-12">
                <div class="panel panel-bd lobidrag">

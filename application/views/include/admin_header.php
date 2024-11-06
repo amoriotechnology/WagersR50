@@ -773,10 +773,7 @@
          </ul>
       </li>
       <!-- New Account End -->
-      <?php            
-         break;
-         }
-         } ?>
+      <?php break; } } ?>
       <?php 
          foreach(  $this->session->userdata('admin_data') as $admtest){
          $split=explode('-',$admtest);
@@ -798,104 +795,106 @@
          </ul>
       </li>
       <!-- Bank menu end -->
-      <?php            
-         break;
-         }
-         } ?>
+      <?php break; } } ?>
+
       <?php 
          foreach(  $this->session->userdata('admin_data') as $admtest){
          $split=explode('-',$admtest);
          if(trim($split[0])=='hrm'){
           ?>
+
       <!-- Human Resource New menu start -->
       <li class="treeview  ">
          <a href="#">
-         <i class="fa fa-balance-scale"></i><span><?php  echo display('hrm_management'); ?></span>
-         <span class="pull-right-container">
-         <i class="fa fa-angle-left pull-right"></i>
-         </span>
+            <i class="fa fa-balance-scale"></i><span><?php  echo display('hrm_management'); ?></span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
          </a>
          <ul class="treeview-menu">
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/manage_employee"><?php  echo display('Employee Info (W4 form)');?></a></li>
             <!-- <li class="treeview  "><a href="<?php //echo base_url(); ?>/Chrm/add_employee"><?php  echo display('Employee Info (W4 form)');?></a></li> -->
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/manage_timesheet"><?php  echo display('Time sheet');?></a></li>
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/pay_slip_list"><?php  echo display('Pay slip / Checks per user');?></a></li>
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payroll_setting"><?php  echo display('Payroll settings');?></a></li>
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payslip_setting"><?php  echo ('Payslip settings');?></a></li>
+            <!-- <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payroll_setting"><?php  echo display('Payroll settings');?></a></li>
+            <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payslip_setting"><?php  echo ('Payslip settings');?></a></li> -->
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/expense_list"><?php echo display("expense");?></a></li>
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/manage_officeloan"><?php echo display("office_loan");?></a></li>
             <!--<li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/hr_tools"><?php  echo "HR ToolKit";?></a></li>-->
-          
-           <li class="treeview  ">
-                           <a href="#">
-                           <i class=""></i> <span><?php echo ('Reports'); ?></span>
-                           <span class="pull-right-container">
-                           <i class="fa fa-angle-left pull-right"></i>
-                           </span>
-                           </a>
-                           <ul class="treeview-menu">
-                              <!-- <li class="treeview  "><a href=""><?php echo ('Federal Tax');?></a></li> -->
-                               <li class="treeview  ">
-                           <a href="#">
-                           <i class=""></i> <span><?php echo ('Federal Tax'); ?></span>
-                           <span class="pull-right-container">
-                           <i class="fa fa-angle-left pull-right"></i>
-                           </span>
-                           </a>
-                          <ul class="treeview-menu">
-                              <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/federal_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Income Tax');?></a></li>
-                              <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/social_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Social Security');?> </a></li>
-                              <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/medicare_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Medicare');?></a></li>
-                                <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/unemployment_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Unemployment');?></a></li>
-                                  <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/federal_summary?id=<?php echo $encode_com_id; ?>"><?php echo ('Overall Summary');?></a></li>
-                           </ul>
+           <li class="treeview ">
+            <a href="#">
+               <i class=""></i> <span><?php echo ('Reports'); ?></span>
+               <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
+            </a>
+            <ul class="treeview-menu">
+            <!-- <li class="treeview  "><a href=""><?php echo ('Federal Tax');?></a></li> -->
+               <li class="treeview  ">
+                  <a href="#">
+                     <i class=""></i> <span><?php echo ('Federal Tax'); ?></span>
+                     <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
+                  </a>
+                  <ul class="treeview-menu">
+                     <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/federal_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Income Tax');?></a></li>
+                     <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/social_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Social Security');?> </a></li>
+                     <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/medicare_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Medicare');?></a></li>
+                     <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/unemployment_tax_report?id=<?php echo $encode_com_id; ?>"><?php echo ('Unemployment');?></a></li>
+                     <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/federal_summary?id=<?php echo $encode_com_id; ?>"><?php echo ('Overall Summary');?></a></li>
+                  </ul>
+               </li>
+               <li class="treeview">
+               <a href="#">
+                  <i class=""></i> <span><?php echo ('State Tax'); ?></span>
+                  <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
+               </a>
+                  <ul class="treeview-menu">
+                     <?php if (!empty($state_tax_list)) : ?>
+                        <?php foreach ($state_tax_list as $st) : ?>
+                           <li class="treeview">
+                              <a href="<?php echo base_url('Chrm/report/' . $st['tax']) . '?id=' . $encode_com_id; ?>"><?php echo $st['tax']; ?></a>
+                           </li>
+                        <?php endforeach; ?>
+                     <?php endif; ?>
+                     <?php if (!empty($unique_taxes)) : ?>
+                        <?php foreach ($unique_taxes as $st) : ?>
+                           <li class="treeview">
+                              <a href="<?php echo base_url('Chrm/report/' . $st['tax']) . '?id=' . $encode_com_id; ?>"><?php echo $st['tax']; ?></a>
+                           </li>
+                        <?php endforeach; ?>
+                     <?php endif; ?>
+                        <li class="treeview  ">
+                           <a href="<?php echo base_url(); ?>/Chrm/state_summary?id=<?php echo $encode_com_id; ?>"><?php echo ('State Overall Summary');?></a>
                         </li>
-                          <li class="treeview  ">
-                           <a href="#">
-                           <i class=""></i> <span><?php echo ('State Tax'); ?></span>
-                           <span class="pull-right-container">
-                           <i class="fa fa-angle-left pull-right"></i>
-                           </span>
-                           </a>
-                           <ul class="treeview-menu">
-<?php if (!empty($state_tax_list)) : ?>
-    <?php foreach ($state_tax_list as $st) : ?>
-        <li class="treeview">
-            <a href="<?php echo base_url('Chrm/report/' . $st['tax']) . '?id=' . $encode_com_id; ?>"><?php echo $st['tax']; ?></a>
+                  </ul>                                          
+               </li>
+               <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/city_local_tax"><?php  echo ('City Tax');?></a></li>
+               <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/city_tax_report"><?php  echo ('County Tax');?></a></li>                   
+               <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/other_tax"><?php  echo ('Other Taxes');?></a></li>
+               <li class="treeview  "><a href="<?php echo base_url(); ?>Chrm/OverallSummary?id=<?php echo $encode_com_id; ?>"><?php echo ('Overall Summary');?></a></li>
+            </ul>
          </li>
-    <?php endforeach; ?>
-<?php endif; ?>
-<?php if (!empty($unique_taxes)) : ?>
-    <?php foreach ($unique_taxes as $st) : ?>
-        <li class="treeview">
-            <a href="<?php echo base_url('Chrm/report/' . $st['tax']) . '?id=' . $encode_com_id; ?>"><?php echo $st['tax']; ?></a>
-         </li>
-    <?php endforeach; ?>
-<?php endif; ?>
 
- <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/state_summary?id=<?php echo $encode_com_id; ?>"><?php echo ('State Overall Summary');?></a></li>
-                                 </ul>
-                                  
-                        </li>
-                    <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/city_local_tax"><?php  echo ('City Tax');?></a></li>
-                       <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/city_tax_report"><?php  echo ('County Tax');?></a></li>       
-                            
-                                 <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/other_tax"><?php  echo ('Other Taxes');?></a></li>
-                                 <li class="treeview  "><a href="<?php echo base_url(); ?>Chrm/OverallSummary?id=<?php echo $encode_com_id; ?>"><?php echo ('Overall Summary');?></a></li>
-                           </ul>
-                        </li>
-         </ul>
-      </li>
-      <!-- Human Resource New menu end -->
-      <?php            
-         break;
-         }
-         } ?>
-      <?php 
-         foreach(  $this->session->userdata('admin_data') as $admtest){
-         $split=explode('-',$admtest);
-         if(trim($split[0])=='email'){
-          ?>
+         <li class="treeview ">
+            <a href="#">
+               <i class=""></i> <span>Settings</span>
+               <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
+            </a>
+            <ul class="treeview-menu">
+               <li class="treeview  "><a href="<?= base_url('Chrm/payroll_setting'); ?>">Payroll Setting</a></li>
+               <li class="treeview  "><a href="<?= base_url('Chrm/payslip_setting'); ?>">Payslip Setting</a></li>                   
+               <li class="treeview  "><a href="<?= base_url('Company_setup/manage_company'); ?>">Manage My Company</a></li>
+               <li class="treeview  "><a href="<?= base_url('Chrm/week_setting'); ?>">Week Setting</a></li>
+            </ul>
+         </li>
+
+      </ul>
+   </li>
+   <!-- Human Resource New menu end -->
+   <?php break; } } ?> 
+   <?php 
+      foreach(  $this->session->userdata('admin_data') as $admtest){
+      $split=explode('-',$admtest);
+      if(trim($split[0])=='email'){
+         ?>
       <li class="treeview  ">
          <a href="<?php echo base_url(); ?>/Cweb_setting/email_setting">
          <i class="ti-email"></i><span><?php echo display('email'); ?></span>
@@ -1084,10 +1083,10 @@
          </span>
          </a>
          <ul class="treeview-menu">
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Company_setup/manage_company"><?php  echo display('Manage my Company'); ?></a></li>
+            <!-- <li class="treeview  "><a href="<?php echo base_url(); ?>/Company_setup/manage_company"><?php  echo display('Manage my Company'); ?></a></li> -->
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Language"><?php  echo display('language'); ?> </a></li>
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Currency"><?php  echo display('currency'); ?> </a></li>
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Cweb_setting"><?php  echo display('setting'); ?> </a></li>
+            <li class="treeview  "><a href="<?php echo base_url(); ?>Cweb_setting"><?php  echo display('setting'); ?> </a></li>
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Cweb_setting/mail_setting"><?php  echo display('mail_setting'); ?> </a></li>
             <li class="treeview "><a href="<?php echo base_url(); ?>/Language/import_page"><?php  echo ('Import CSV'); ?> </a></li>
             <li style="display:none" class="treeview  "><a href="<?php echo base_url(); ?>/Cweb_setting/app_setting"><?php echo  display('app_setting');  ?> </a></li>

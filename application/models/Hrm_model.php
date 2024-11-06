@@ -3295,14 +3295,14 @@ public function getTaxdetailsdata($tax){
 //   }
    
       
-      public function employee_detl($id){
+    public function employee_detl($id){
         $this->db->select('*');
         $this->db->from('employee_history a');
-         $this->db->join('designation b','a.designation = b.id');
+        $this->db->join('designation b','a.designation = b.designation');
         $this->db->where('a.id', $id);
-           $this->db->where('a.create_by',$this->session->userdata('user_id'));
+        $this->db->where('a.create_by',$this->session->userdata('user_id'));
         $query = $this->db->get();
-    //  echo $this->db->last_query(); die();
+
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
@@ -4580,6 +4580,20 @@ public function getTotalmanagetimesheetlist($search, $emp_name = 'All')
     return $query->num_rows();
 }
 
+
+public function insertData($table, $data) {
+    $this->db->insert($table, $data);
+    return $this->db->insert_id();
+}
+
+public function updateData($table, $data, $where) {
+    $this->db->set($data)->where($where)->update($table);
+    if($this->db->affected_rows() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 }
 
