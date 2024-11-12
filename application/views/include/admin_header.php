@@ -90,8 +90,10 @@
          <span class="pe-7s-keypad"></span>
       </a>
       <?php
-      $user_comp_id = $this->session->userdata('user_id');
+         $user_comp_id = $this->session->userdata('user_id');
+         $adminId = $this->session->userdata('unique_id');
          $encode_com_id   = encodeBase64UrlParameter($user_comp_id);
+         $encode_admin_id   = encodeBase64UrlParameter($adminId);
          $urcolp = '0';
          if($this->uri->segment(2) =="gui_pos" ){
            $urcolp = "gui_pos";
@@ -814,8 +816,10 @@
          <ul class="treeview-menu">
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/manage_employee"><?php  echo display('Employee Info (W4 form)');?></a></li>
             <!-- <li class="treeview  "><a href="<?php //echo base_url(); ?>/Chrm/add_employee"><?php  echo display('Employee Info (W4 form)');?></a></li> -->
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/manage_timesheet?id=<?php echo $encode_com_id; ?>"><?php  echo display('Time sheet');?></a></li>
-            <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/pay_slip_list?id=<?php echo $encode_com_id; ?>"><?php  echo display('Pay slip / Checks per user');?></a></li>
+            
+            <li class="treeview  "><a href="<?php echo base_url(); ?>Chrm/manage_timesheet?id=<?php echo $encode_com_id . '&admin_id=' . $encode_admin_id; ?>"><?php  echo display('Time sheet');?></a></li>
+
+            <li class="treeview  "><a href="<?php echo base_url(); ?>Chrm/pay_slip_list?id=<?php echo $encode_com_id . '&admin_id=' . $encode_admin_id; ?>"><?php  echo display('Pay slip / Checks per user');?></a></li>
             <!-- <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payroll_setting"><?php  echo display('Payroll settings');?></a></li>
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/payslip_setting"><?php  echo ('Payslip settings');?></a></li> -->
             <li class="treeview  "><a href="<?php echo base_url(); ?>/Chrm/expense_list"><?php echo display("expense");?></a></li>

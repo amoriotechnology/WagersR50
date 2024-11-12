@@ -213,7 +213,7 @@ td{
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height: 50px;">
                         <div class="panel-title">
-                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
                     <?php //echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
@@ -228,7 +228,10 @@ td{
                                 <div class="col-sm-6">
                                     <input type="hidden" id="tsheet_id" value="<?php echo $id ; ?>" name="tsheet_id" />
                                     <input  type="hidden" readonly id="unique_id" value="<?php echo $this->session->userdata('unique_id') ?>" name="unique_id" />
-                                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+
+                                    <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+
+                                    <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                                     <select name="templ_name" id="templ_name" class="form-control"  required  tabindex="3" style="width:100;">
                                         <option value=""> <?php echo ('Select Employee Name') ?></option>
                                     <?php foreach($employee_name as $emp_name) { ?>

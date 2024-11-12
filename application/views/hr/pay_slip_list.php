@@ -129,8 +129,9 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             [10, 25, 50, 100]
         ],
         "ajax": {
-            "url": "<?php echo base_url('Chrm/payslipIndexData?id='); ?>" +
-                encodeURIComponent('<?php echo $_GET['id']; ?>'),
+            "url": "<?php echo base_url('Chrm/payslipIndexData?id='); ?>" + 
+                encodeURIComponent('<?php echo $_GET['id']; ?>') + 
+                '&admin_id=' + encodeURIComponent('<?php echo $_GET['admin_id']; ?>'),
             "type": "POST",
             "data": function(d) {
                 d['<?php echo $this->security->get_csrf_token_name(); ?>'] =

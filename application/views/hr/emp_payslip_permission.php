@@ -210,7 +210,7 @@ th,td{
             <div class="panel panel-bd lobidrag">
                 <div class="panel-heading" style="height:50px;">
                     <div class="panel-title">
-                        <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                        <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet').'?id='.urlencode($_GET['id']).'&admin_id='.urlencode($_GET['admin_id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?></a> 
                     </div>
                 </div>
                 <?php // echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>

@@ -1129,6 +1129,7 @@ public function second_pay_slip() {
    $this->load->model('Hrm_model');
    $data['title'] = display('pay_slip');
    $adminId = $this->input->post('admin_company_id');
+   $admincompanyId = $this->input->post('adminId');
      $data['business_name']=(!empty($datacontent[0]['company_name'])?$datacontent[0]['company_name']:$company_info[0]['company_name']);
           $data['phone']=(!empty($datacontent[0]['mobile'])?$datacontent[0]['mobile']:$company_info[0]['mobile']);
           $data['email']=(!empty($datacontent[0]['email'])?$datacontent[0]['email']:$company_info[0]['email']);
@@ -2753,12 +2754,7 @@ if ($date1) {
 }
     }
 $this->session->set_flashdata('message', display('save_successfully'));
-redirect('Chrm/manage_timesheet?id=' . $adminId);
-
-
-
-
-
+redirect(base_url('Chrm/manage_timesheet?id=' . $adminId . '&admin_id=' . $admincompanyId));
 
 }
 
@@ -4745,8 +4741,9 @@ public function manage_timesheet()
 
 // Fetch data in Manage TimeSheet List - Madhu
 public function manageTimesheetListData()
-{
+{  
     $encodedId     = isset($_GET["id"]) ? $_GET["id"] : null;
+    $admin_id = isset($_GET['admin_id']) ? $_GET['admin_id'] : null;
     $decodedId      = decodeBase64UrlParameter($encodedId);
     $limit          = $this->input->post("length");
     $start          = $this->input->post("start");
@@ -4763,9 +4760,10 @@ public function manageTimesheetListData()
 
     foreach ($items as $item) { //echo "<pre>"; print_r($item); echo "</pre>"; die;
 
-      $user = '<a href="' . base_url("Chrm/employee_payslip_permission?id=" . $encodedId . "&timesheet_id=" . $item['timesheet_id']) . '" class="btnclr btn btn-sm"> <i class="fa fa-user" aria-hidden="true"></i> </a>';
+      $user = '<a href="' . base_url("Chrm/employee_payslip_permission?id=" . $encodedId . "&admin_id=" . $admin_id . "&timesheet_id=" . $item['timesheet_id']) . '" class="btnclr btn btn-sm"> <i class="fa fa-user" aria-hidden="true"></i> </a>';
 
-     $download = '<a href="' . base_url("Chrm/timesheed_inserted_data?id=" . $encodedId . "&timesheet_id=" . $item['timesheet_id'] . "&type=timesheet") . '" class="btnclr btn btn-sm">
+
+     $download = '<a href="' . base_url("Chrm/timesheed_inserted_data?id=" . $encodedId . "&admin_id=" . $admin_id . "&timesheet_id=" . $item['timesheet_id'] . "&type=timesheet") . '" class="btnclr btn btn-sm">
                 <i class="fa fa-download" aria-hidden="true"></i>
              </a>';
 
@@ -4775,7 +4773,7 @@ public function manageTimesheetListData()
 
       $status = ($item['uneditable'] == 1) ? '<span class="green">Generated</span>' : '<span class="red">Pending</span>';
 
-      $edit = ($item['uneditable'] == 1) ? "" : '<a href="'.base_url("Chrm/edit_timesheet?id=" . $encodedId . "&timesheet_id=" . $item['timesheet_id']) . '" class="btnclr btn btn-sm" title="Edit"> <i class="fa fa-edit"></i> </a>';
+      $edit = ($item['uneditable'] == 1) ? "" : '<a href="'.base_url("Chrm/edit_timesheet?id=" . $encodedId . "&admin_id=" . $admin_id . "&timesheet_id=" . $item['timesheet_id']) . '" class="btnclr btn btn-sm" title="Edit"> <i class="fa fa-edit"></i> </a>';
 
       $row = [
         'id'      => $i,
@@ -4868,6 +4866,7 @@ public function pay_slip() {
        $w = & get_instance();
        $w->load->model('Ppurchases');
        $adminId = $this->input->post('admin_company_id');
+       $admincompanyId = $this->input->post('adminId');
        // $decodedId      = decodeBase64UrlParameter($adminId);
        $company_info = $w->Ppurchases->retrieve_company();
        $datacontent = $CI->invoice_content->retrieve_data();
@@ -5724,7 +5723,8 @@ $data2 = array(
      
   //echo $this->db->last_query();.;
     $this->session->set_flashdata('message', display('save_successfully'));
-     redirect('Chrm/manage_timesheet?id=' . $adminId);
+    redirect(base_url('Chrm/manage_timesheet?id=' . $adminId . '&admin_id=' . $admincompanyId));
+
  }
 
 
@@ -5770,6 +5770,7 @@ $data2 = array(
 public function payslipIndexData() 
 {     
     $encodedId      = isset($_GET['id']) ? $_GET['id'] : null;
+    $admin_id      = isset($_GET['admin_id']) ? $_GET['admin_id'] : null;
     $decodedId      = decodeBase64UrlParameter($encodedId);
 
       $limit          = $this->input->post("length");
@@ -5802,7 +5803,7 @@ public function payslipIndexData()
               "tot_amt"   => (!empty($item['extra_this_hour']) ? ($item['above_extra_sum'] + $item['extra_thisrate']) : $item['above_extra_sum']),
               "overtime"   => !empty($item['extra_this_hour']) ? $item['extra_this_hour'] : '0',
               "sales_comm" => $item['sales_c_amount'],
-              "action" => "<a href='" . base_url('Chrm/time_list?id=' . $encodedId . '&timesheet_id=' . $item['timesheet_id'] . '&templ_name=' . $item['templ_name']) . "' class='btnclr btn btn-success btn-sm'> <i class='fa fa-window-restore'></i> </a>"
+              "action" => "<a href='" . base_url('Chrm/time_list?id=' . $encodedId . '&admin_id=' . $admin_id . '&timesheet_id=' . $item['timesheet_id'] . '&templ_name=' . $item['templ_name']) . "' class='btnclr btn btn-success btn-sm'> <i class='fa fa-window-restore'></i> </a>"
           ];
           $data[] = $row;
           $i++;
