@@ -972,6 +972,7 @@ $year = date("Y");
          $this->db->insert('state_localtax', $data1);
         }else if($type == 'weekly'){
          $this->db->insert('weekly_tax_info', $data1);
+         // echo $this->db->last_query(); die();
         }else if($type == 'biweekly'){
          $this->db->insert('biweekly_tax_info', $data1);
          // echo $this->db->last_query(); die();

@@ -560,42 +560,6 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
                              
   
 
-                              <?php if (!empty($selected_state_tax)) { ?>
-<?php if ($hourly || $weekly ||  $biweekly){  ?>
-<tr>
-    <td style="text-align:left;">New Jersey-Income tax</td>
-    <td></td>
-    <td class="current"><?php echo "-" . $hourly; ?></td>
-    <td class="ytd"><?php echo round($OVhourly, 2); ?>
-</td>
-</tr>
-<?php } ?>
-
-<?php }else{ ?>
-<?php foreach ($selected_state_tax as $k => $v) {  ?>
-   <?php if ($v) { 
-      $split = explode('-', $k);
-      $title = str_replace("'employee_", '', $split[0]);
-      $rep = str_replace("'", '', $split[1]);
-      $rep2 = isset($split[2]) ? str_replace("'", '', $split[2]) : '';
-   ?>
-        <tr class="avoid-page-break">
-            <td style="border: none;"></td>
-            <td style="border: none;"></td>
-            <td style="border: none;"></td>
-            <td style="border: none;"></td>
-            <td title="<?php echo "Working State Tax - " . $title; ?>" style="text-align:left; border: none;">
-                <?php echo $title ? $rep2 . '-' . $rep : $rep; ?>
-            </td>
-            <td style="text-align:left; border: none;" class="current">
-                <?php echo "-" . round($v, 3); ?>
-            </td>
-            <td style="text-align:left; border: none;" class="ytd">
-                <?php echo round($selected_state_sum[$rep], 3); ?>
-            </td>
-        </tr>
-    <?php }?>
-<?php }}?>
 
  
 
