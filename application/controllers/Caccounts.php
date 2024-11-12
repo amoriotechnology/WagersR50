@@ -436,9 +436,6 @@ $year = date("Y");
           $tax['account'] =$this->input->post('account',TRUE);
           $tax['show_taxonreturn'] =$this->input->post('show_taxonreturn',TRUE);
           $tax['status_type'] =$this->input->post('status_type',TRUE);
-
-
-
           $tax['created_by'] = $this->session->userdata('user_id');
 
           $tax['status'] = 1;
@@ -575,9 +572,13 @@ $year = date("Y");
         $tax['account'] = $this->input->post('account',TRUE);
         $tax['show_taxonreturn'] = $this->input->post('show_taxonreturn',TRUE);
         $tax['status_type'] = $this->input->post('status_type',TRUE);
+        
 
         $result = $this->Accounts->update_tax_data($tax,$id);
         if ($result == true) {
+
+           logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $id, '', $this->session->userdata('userName'), 'Edit Tax', 'Taxes', 'Tax has been updated Successfully', 'Add', date('m-d-Y'));
+
            $this->session->set_userdata(array('message'=>display('successfully_updated')));
         }
         $tax_list = $this->db->select('*')
@@ -607,6 +608,7 @@ $year = date("Y");
        // print_r( $result);
 
         if ($result == true) {
+            logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $id, '', $this->session->userdata('userName'), 'Delete Tax', 'Taxes', 'Tax has been deleted Successfully', 'Delete', date('m-d-Y'));
            $this->session->set_userdata(array('message'=>display('successfully_delete')));
         }
         redirect('Caccounts/manage_tax');
@@ -970,6 +972,7 @@ $year = date("Y");
          $this->db->insert('state_localtax', $data1);
         }else if($type == 'weekly'){
          $this->db->insert('weekly_tax_info', $data1);
+         // echo $this->db->last_query(); die();
         }else if($type == 'biweekly'){
          $this->db->insert('biweekly_tax_info', $data1);
          // echo $this->db->last_query(); die();

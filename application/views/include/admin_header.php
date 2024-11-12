@@ -915,6 +915,11 @@
          <i class="ti-calendar"></i><span><?php echo 'Calendar'; ?></span>
          </a>
       </li> 
+      <li class="treeview">
+         <a href="<?php echo base_url(); ?>/Cweb_setting/viewLogs?id=<?php echo $encode_com_id; ?>">
+         <i class="fas fa-history"></i><span><?php echo 'Logs'; ?></span>
+         </a>
+      </li> 
       <?php if(isset($Web_settings[0]['agree_share']) && $Web_settings[0]['agree_share'] == 'Yes') { ?>
     <li class="treeview">
         <a href="<?php echo base_url(); ?>/Cweb_setting/agree_view">

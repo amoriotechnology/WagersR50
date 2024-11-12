@@ -512,9 +512,9 @@
                         <select  name="payroll_type" id="payroll_type" requried class="form-control"  >
                            <option value="">Select the Payroll Type</option>
                            <option value="Hourly">Hourly</option>
-                           <!--<option value="Salaried-weekly">Salaried-Weekly</option>-->
-                           <!--<option value="Salaried-BiWeekly">Salaried-BiWeekly</option>-->
-                           <!--<option value="Salaried-Monthly">Salaried-Monthly</option>-->
+                           <option value="Salaried-weekly">Salaried-Weekly</option>
+                           <option value="Salaried-BiWeekly">Salaried-BiWeekly</option>
+                           <option value="Salaried-Monthly">Salaried-Monthly</option>
                            <!--<option value="Salaried-BiMonthly">Salaried-BiMonthly</option>-->
                            <!--<option value="SalesCommission">SalesCommission</option>-->
                            <?php foreach($payroll_data as $prolltype){ ?>

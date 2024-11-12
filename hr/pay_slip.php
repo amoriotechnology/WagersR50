@@ -560,25 +560,10 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
                              
   
 
-                              <?php if (!empty($selected_state_tax)) { ?>
-<?php if ($hourly || $weekly ||  $biweekly){  ?>
-   
-   
-<?php //if ($infoemployee[0]['payroll_type'] == 'Hourly'  ||  $infoemployee[0]['payroll_type'] == 'SalesCommission' || $infoemployee[0]['sales_partner'] == 'Sales_Partner' ) { ?>
-
-<tr>
-    <td style="text-align:left;">New Jersey-Income tax</td>
-    <td></td>
-    <td class="current"><?php echo "-" . $hourly; ?></td>
-    <td class="ytd"><?php echo round($OVhourly, 2); ?>
-</td>
-</tr>
+                  
 
 
 
-<?php }//} ?>
-
-<?php }else{ ?>
 <?php foreach ($selected_state_tax as $k => $v) { ?>
     <?php if ($v) { 
         $split = explode('-', $k);
@@ -601,8 +586,8 @@ $total_time = sprintf('%d:%02d', $hours, $minutes);
                 <?php echo round($selected_state_sum[$rep], 3); ?>
             </td>
         </tr>
-    <?php }?>
-<?php }}?>
+    <?php }}?>
+
 
  
 

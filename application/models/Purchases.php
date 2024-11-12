@@ -2651,6 +2651,9 @@ $msg=$this->input->post('message_invoice',TRUE);
         $q=$this->db->get('product_purchase');
         $row = $q->row_array();
     if(!empty($row['purchase_id'])){
+
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Update Expense', 'Expenses', 'Expense has been update successfully', 'Update', date('m-d-Y'));
+
         $this->session->set_userdata("purchase_1",$row['purchase_id']);
    $this->db->where('purchase_id', $this->session->userdata("purchase_1"));
   $this->db->delete('product_purchase');
@@ -2659,6 +2662,9 @@ $msg=$this->input->post('message_invoice',TRUE);
     //   echo $this->db->last_query();echo "<br/>";
    }
     else{
+
+    logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Add Expense', 'Expenses', 'Expense has been add successfully', 'Add', date('m-d-Y'));
+
     $this->db->insert('product_purchase', $data);
     //  echo $this->db->last_query();echo "<br/>";
     }

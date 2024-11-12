@@ -312,7 +312,9 @@ public function transaction_list(){
             'sales_tax'       =>$this->input->post('tax',TRUE),
             'tax_percent'     =>$this->input->post('taxes',TRUE)
         );
-       //  print_r($data);die();
+
+       logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Add Customer', 'Customer', 'Customer has been added successfully', 'Add', date('m-d-Y'));
+
         $result = $this->db->insert('customer_information',$data);
        // echo $this->db->last_query();
          $customer_id = $this->db->insert_id();
@@ -557,10 +559,16 @@ public function customer_update() {
 if ($result == TRUE) {
         $this->db->where('HeadName', $old_headnam);
         $this->db->update('acc_coa', $customer_coa);
+
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $customer_id, '', $this->session->userdata('company_name'), 'Edit Customer', 'Customer', 'Customer has been updated successfully', 'Update', date('m-d-Y'));
+
         $this->session->set_userdata(array('message' => display('successfully_updated')));
         redirect(base_url('Ccustomer/manage_customer'));
         exit;
     }else{
+
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $customer_id, '', $this->session->userdata('company_name'), 'Edit Customer', 'Customer', 'Failed to update customer', 'Error', date('m-d-Y'));
+
        $this->session->set_userdata(array('error_message' => display('please_try_again')));
             redirect(base_url('Ccustomer'));
     }
@@ -572,9 +580,14 @@ if ($result == TRUE) {
     $this->load->model('Customers');
     $invoiceinfo = $this->db->select('*')->from('invoice')->where('customer_id',$customer_id)->get()->num_rows();
     if($invoiceinfo > 0){
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Delete Customer', 'Customer', 'Sorry !! You can not delete this Customer.This Customer already Engaged in calculation system!', 'Error', date('m-d-Y'));
+
       $this->session->set_userdata(array('error_message' => 'Sorry !! You can not delete this Customer.This Customer already Engaged in calculation system!'));
    redirect(base_url('Ccustomer/manage_customer'));
     }else{
+
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $customer_id, '', $this->session->userdata('company_name'), 'Delete Customer', 'Customer', 'Cutomer has been deleted successfully', 'Delete', date('m-d-Y'));
+
     $customerinfo = $this->db->select('customer_name')->from('customer_information')->where('customer_id',$customer_id)->get()->row();
    $customer_head = $customer_id.'-'.$customerinfo->customer_name;
     $this->Customers->delete_customer($customer_id,$customer_head);

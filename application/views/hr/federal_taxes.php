@@ -887,23 +887,34 @@ tr.noBorder td {
        })
      });
 
-      $(".delete_item").click(function(){
-      var tax = $(this).closest('tr').find('td.tax_value').text();
-      var state = $(this).closest('tr').find('td.state_name').text();
-      var dataString = {
-         tax : tax,
-         state : state
-      };
-      dataString[csrfName] = csrfHash;
-       $.ajax({
-         type: "POST",
-         url: "<?php echo base_url(); ?>Chrm/delete_tax",
-         data: {<?php echo $this->security->get_csrf_token_name();?>: csrfHash,tax:tax,state:state},
-         success:function(data) {     
-            location.reload();
-         },
-         error: function (){ }
-       })
+
+
+
+
+
+       $(".delete_item").click(function(){
+         if (confirm("Are you sure you want to delete this item?")) {
+            var tax = $(this).closest('tr').find('td.tax_value').text();
+            var state = $(this).closest('tr').find('td.state_name').text();
+              var dataString = {
+                 tax : tax,
+                 state : state
+             
+            };
+            dataString[csrfName] = csrfHash;
+             $.ajax({
+                 type: "POST",
+              url: "<?php echo base_url(); ?>Chrm/delete_tax",
+                    
+                 data: {<?php echo $this->security->get_csrf_token_name();?>: csrfHash,tax:tax,state:state},
+                 success:function(data)
+                 {     
+                    location.reload();
+                 },
+                 error: function (){ }
+             })
+         }
+
      });
    });
 

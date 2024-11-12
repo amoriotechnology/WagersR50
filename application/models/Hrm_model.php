@@ -49,7 +49,7 @@ public function statetaxreport($employee_name=null,$url,$date=null)
         $end_date = $dates[1];
         $this->db->where("d.cheque_date BETWEEN '$start_date' AND '$end_date'");
     }
-  if ($employee_name !== 'All' && $employee_name !== null) {
+   if ($employee_name !== 'All' && $employee_name !== null) {
         $trimmed_emp_name = trim($employee_name);
         $this->db->group_start();
         $this->db->like("TRIM(CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name))", $trimmed_emp_name);
@@ -85,6 +85,7 @@ public function get_employee_sal($id , $tax){
         $this->db->where('payroll_type', $tax);
         $this->db->where('create_by', $user_id);
         $query = $this->db->get();
+        // echo $this->db->last_query(); die;
           if ($query->num_rows() > 0) {
             return $query->result_array();
          }
@@ -1919,7 +1920,8 @@ public function state_tax(){
         $this->db->select('employee');
         $this->db->from('federal_tax');
         $this->db->where($employee_status,$federal_range);
-       $query = $this->db->get();
+        $this->db->where('created_by',$this->session->userdata('user_id'));
+        $query = $this->db->get();
 
       if ($query->num_rows() > 0) {
             
@@ -1930,16 +1932,18 @@ public function state_tax(){
 }
 
 
-public function unemployment_tax_info($employee_status,$final,$unemployment_range){
-    $this->db->select('employee,employer,details');
+public function unemployment_tax_info($employee_status,$final,$unemployment_range)
+{
+    $this->db->select('employee,employer,details,created_by');
     $this->db->from('federal_tax');
     $this->db->where($employee_status,$unemployment_range);
-   $query = $this->db->get();
- 
-         if ($query->num_rows() > 0) {
+    $this->db->where('created_by',$this->session->userdata('user_id'));
+    $query = $this->db->get();
+    // echo $this->db->last_query(); die;
+    if ($query->num_rows() > 0) {
        return $query->result_array();
     }else{
-return 0;
+        return 0;
     }
 }
 
@@ -1950,6 +1954,7 @@ return 0;
         $this->db->select('employee,employer');
         $this->db->from('federal_tax');
         $this->db->where($employee_status,$social_range);
+        $this->db->where('created_by',$this->session->userdata('user_id'));
        $query = $this->db->get();
      // echo  $this->db->last_query();
        if ($query->num_rows() > 0) {
@@ -1993,6 +1998,7 @@ $this->db->update('state_and_tax', $data1);
         $this->db->select('employee,employer');
         $this->db->from('federal_tax');
         $this->db->where($employee_status,$Medicare_range);
+        $this->db->where('created_by',$this->session->userdata('user_id'));
        $query = $this->db->get();
     //   echo  $this->db->last_query();
              if ($query->num_rows() > 0) {
@@ -2055,10 +2061,54 @@ public function get_data_pay($d1 = null, $empid, $timesheetid) {
     }
     return false;
 }
-public function get_taxname_biweekly(){
+public function get_taxname_weekly($living_state,$working_state){
+    $user_id = $this->session->userdata('user_id');
+    $this->db->select('tax');
+    $this->db->from('weekly_tax_info');
+    $this->db->where('create_by', $user_id);  
+
+    if (!empty($working_state) && !empty($living_state))  {
+        $this->db->like('tax', $working_state);
+        $this->db->or_like('tax', $living_state);
+    }
+    elseif ((!empty($living_state) && empty($working_state))) {
+        $this->db->like('tax', $living_state);
+    } elseif ((empty($living_state) && !empty($working_state))) {
+        $this->db->like('tax', $working_state);
+    }
+
+    $query = $this->db->get();
+  //   echo $this->db->last_query(); die;
+     if ($query->num_rows() > 0) {
+        return $query->result_array();
+     }
+      return true;
+}
+public function get_taxname_biweekly($living_state,$working_state){
     $user_id = $this->session->userdata('user_id');
     $this->db->select('tax');
     $this->db->from('biweekly_tax_info');
+    $this->db->where('create_by', $user_id);  
+    if (!empty($working_state) && !empty($living_state))  {
+        $this->db->like('tax', $working_state);
+        $this->db->or_like('tax', $living_state);
+    }
+    elseif ((!empty($living_state) && empty($working_state))) {
+        $this->db->like('tax', $living_state);
+    } elseif ((empty($living_state) && !empty($working_state))) {
+        $this->db->like('tax', $working_state);
+    }
+    $query = $this->db->get();
+     // echo $this->db->last_query(); die;
+     if ($query->num_rows() > 0) {
+        return $query->result_array();
+     }
+      return true;
+}
+public function get_taxname_hourly(){
+    $user_id = $this->session->userdata('user_id');
+    $this->db->select('tax');
+    $this->db->from('state_localtax');
     $this->db->where('create_by', $user_id);  
     $query = $this->db->get();
      if ($query->num_rows() > 0) {
@@ -2072,12 +2122,22 @@ public function deleteDuplicateTaxRecords() {
                 WHERE t1.weekly IS NULL AND t1.monthly IS NULL AND t1.biweekly IS NULL;";    
         return $this->db->query($sql);
     }
-public function get_taxname_monthly(){
+public function get_taxname_monthly($living_state,$working_state){
     $user_id = $this->session->userdata('user_id');
     $this->db->select('tax');
     $this->db->from('monthly_tax_info');
     $this->db->where('create_by', $user_id);  
+    if (!empty($working_state) && !empty($living_state))  {
+        $this->db->like('tax', $working_state);
+        $this->db->or_like('tax', $living_state);
+    }
+    elseif ((!empty($living_state) && empty($working_state))) {
+        $this->db->like('tax', $living_state);
+    } elseif ((empty($living_state) && !empty($working_state))) {
+        $this->db->like('tax', $working_state);
+    }
     $query = $this->db->get();
+    // echo $this->db->last_query(); die;
      if ($query->num_rows() > 0) {
         return $query->result_array();
      }
@@ -2126,16 +2186,21 @@ $query = $this->db->get();
 
 
 
-public function local_state_tax($employee_status,$final,$local_tax_range){
-        $this->db->select('employee,employer');
-        $this->db->from('state_localtax');
-        $this->db->where($employee_status,$local_tax_range);
-        // $this->db->not_like('tax', 'Unemployment');
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-           return $query->result_array();
-        }
-         return true;
+public function local_state_tax($employee_status,$final,$local_tax_range, $stateTax="")
+{
+    $this->db->select('employee,employer,create_by');
+    $this->db->from('state_localtax');
+    $this->db->where($employee_status,$local_tax_range);
+    if($stateTax !=""){
+        $this->db->like('tax', $stateTax);
+    }
+    $this->db->where('create_by', $this->session->userdata('user_id'));  
+    $query = $this->db->get();
+    // echo $this->db->last_query();die;
+    if ($query->num_rows() > 0) {
+       return $query->result_array();
+    }
+     return true;
  }
 
 
@@ -2243,7 +2308,7 @@ public function sc_info_count($templ_name, $payperiod) {
         $this->db->where('timesheet_id', $timesheet_id);
         $this->db->where('create_by',$this->session->userdata('user_id'));
         $query = $this->db->get();
-      //   echo $this->db->last_query();
+        // echo $this->db->last_query(); die;
          if ($query->num_rows() > 0) {
            return $query->result_array();
          }
@@ -4203,8 +4268,9 @@ public function hourly_tax_info($employee_status,$final,$hourly_range){
         $this->db->select('employee,employer,details');
         $this->db->from('state_localtax');
         $this->db->where($employee_status,$hourly_range);
+        $this->db->where('create_by', $this->session->userdata('user_id'));
        $query = $this->db->get();
-    //  echo  $this->db->last_query();  die();
+     // echo  $this->db->last_query();  die();
        if ($query->num_rows() > 0) {
            return $query->result_array();
         }
@@ -4286,7 +4352,6 @@ public function get_employee_sal_overtime($id, $tax, $timeid) {
         SUM(above_extra_sum) AS overtime');
     $this->db->from('timesheet_info');
     $this->db->where('templ_name', $id);
-    // $this->db->where('timesheet_id', $timeid); // Uncomment if needed
     $this->db->where('payroll_type', $tax);
     $this->db->where('create_by', $user_id);
     $query = $this->db->get();
@@ -4579,6 +4644,93 @@ public function getTotalmanagetimesheetlist($search, $emp_name = 'All')
     }
     return $query->num_rows();
 }
+
+// Logs Entry 
+// Paginated Federal income tax
+public function getPaginatedLogs($limit, $offset, $orderField, $orderDirection, $search, $date = null, $status = 'All', $decodedId)
+{
+    if ($date) {
+        $dates = explode(' to ', $date);
+        $start_date = $dates[0];
+        $end_date = $dates[1];
+        $this->db->where("c_date BETWEEN '$start_date' AND '$end_date'");
+    }
+    if ($status !== 'All' && $status !== null) {
+        $this->db->group_start();
+        $this->db->like("status", $status);
+        $this->db->group_end();
+    }
+    $subquery .= ")";
+    $this->db->select('*');
+    $this->db->from('log_entry');
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->like("user_id", $search);
+        $this->db->or_like("admin_id", $search);
+        $this->db->or_like("field_id", $search);
+        $this->db->or_like("hint", $search);
+        $this->db->or_like("username", $search);
+        $this->db->or_like("user_ipaddress", $search);
+        $this->db->or_like("user_actions", $search);
+        $this->db->or_like("module", $search);
+        $this->db->or_like("details", $search);
+        $this->db->or_like("status", $search);
+        $this->db->or_like("c_date", $search);
+        $this->db->or_like("c_time", $search);
+        $this->db->group_end();
+    }
+    $this->db->where("user_id", $decodedId);
+    $this->db->limit($limit, $offset);
+    $this->db->order_by($orderField, $orderDirection);
+    $query = $this->db->get();
+    if ($query === false) {
+        return false;
+    }
+    return $query->result_array();
+}
+    // Total Logs 
+    public function getTotalLogs($search, $date, $status = 'All', $decodedId)
+    {
+        if ($date) {
+            $dates = explode(' to ', $date);
+            $start_date = $dates[0];
+            $end_date = $dates[1];
+            $this->db->where("c_date BETWEEN '$start_date' AND '$end_date'");
+        }
+        if ($status !== 'All' && $status !== null) {
+            $this->db->group_start();
+            $this->db->like("status", $status);
+            $this->db->group_end();
+        }
+        $subquery .= ")";
+        $this->db->select('*');
+        $this->db->from('log_entry');
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("user_id", $search);
+            $this->db->or_like("admin_id", $search);
+            $this->db->or_like("field_id", $search);
+            $this->db->or_like("hint", $search);
+            $this->db->or_like("username", $search);
+            $this->db->or_like("user_ipaddress", $search);
+            $this->db->or_like("user_actions", $search);
+            $this->db->or_like("module", $search);
+            $this->db->or_like("details", $search);
+            $this->db->or_like("status", $search);
+            $this->db->or_like("c_date", $search);
+            $this->db->or_like("c_time", $search);
+            $this->db->group_end();
+        }
+        $this->db->where("user_id", $decodedId);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by($orderField, $orderDirection);
+        $query = $this->db->get();
+        // echo $this->db->last_query(); die();
+        if ($query === false) {
+            return false;
+        }
+        return $query->num_rows();
+    }
 
 
 public function insertData($table, $data) {

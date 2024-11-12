@@ -227,6 +227,7 @@ $end = $split[1];
             'CreateDate'       => $createdate,
         ];
             //Previous balance adding -> Sending to supplier model to adjust the data.
+           // logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Add Vendor', 'Vendor', 'Vendor has been deleted successfully', 'Add', date('m-d-Y'));
             $this->db->insert('acc_coa',$supplier_coa);
             // echo $this->db->last_query();
             $this->Suppliers->previous_balance_add($this->input->post('previous_balance',TRUE), $supplier_id,$c_acc,$this->input->post('supplier_name',TRUE));

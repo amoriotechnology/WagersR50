@@ -132,15 +132,10 @@ public function insert_supplier() {
         $q=$this->db->get('supplier_information');
         $row = $q->row_array();
 
-   if(!empty($row['supplier_name'])){
-      
-        $this->db->where('supplier_name',$this->input->post('supplier_name',TRUE));
-    
-        $this->db->delete('supplier_information');
-  
-     
-     
-    }   
+       if(!empty($row['supplier_name'])){
+            $this->db->where('supplier_name',$this->input->post('supplier_name',TRUE));
+            $this->db->delete('supplier_information');
+        }   
    
       // print_r($data); die();
             $content =$this->Suppliers->insert_supplier($data);
