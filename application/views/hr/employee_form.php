@@ -517,8 +517,8 @@
                            <option value="Salaried-Monthly">Salaried-Monthly</option>
                            <!--<option value="Salaried-BiMonthly">Salaried-BiMonthly</option>-->
                            <!--<option value="SalesCommission">SalesCommission</option>-->
-                           <!--<?php foreach($payroll_data as $prolltype){ ?>-->
-                           <!--<option value="<?php  echo $prolltype['payroll_type'] ;?>"><?php  echo $prolltype['payroll_type'] ;?></option>-->
+                           <?php foreach($payroll_data as $prolltype){ ?>
+                           <option value="<?php  echo $prolltype['payroll_type'] ;?>"><?php  echo $prolltype['payroll_type'] ;?></option>
                            <!--<?php  } ?>-->
                         </select>
                      </div>

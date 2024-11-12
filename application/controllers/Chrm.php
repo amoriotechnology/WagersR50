@@ -2796,43 +2796,23 @@ public function checkTimesheet() {
 
 
 
-
-
  public function edit_timesheet($id) {
      
-      $CI = & get_instance();
-
-      $CI->load->model('Web_settings');
-      $this->load->model('Hrm_model');
-
-      $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
-
-      $data['title']            = display('Payment_Administration');
-      $data['time_sheet_data'] = $this->Hrm_model->time_sheet_data($id);
-// print_r($data['time_sheet_data']);
-
-      $data['setting_detail'] = $setting_detail;
-
-
-         $data['employee_name'] = $this->Hrm_model->employee_name($data['time_sheet_data'][0]['templ_name']);
-       $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
-      $data['dailybreak'] = $this->Hrm_model->get_dailybreak();
-      $data['duration'] = $this->Hrm_model->get_duration_data();
-      $data['administrator'] = $this->Hrm_model->administrator_data();
-     
-          $content                  = $this->parser->parse('hr/edit_timesheet', $data, true);
-         $this->template->full_admin_html_view($content);
-        }
-
-
-
-
-
-
-
-
-
-
+    $CI = & get_instance();
+    $CI->load->model('Web_settings');
+    $this->load->model('Hrm_model');
+    $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+    $data['title']            = display('Payment_Administration');
+    $data['time_sheet_data'] = $this->Hrm_model->time_sheet_data($id);
+    $data['setting_detail'] = $setting_detail;
+    $data['employee_name'] = $this->Hrm_model->employee_name($data['time_sheet_data'][0]['templ_name']);
+    $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
+    $data['dailybreak'] = $this->Hrm_model->get_dailybreak();
+    $data['duration'] = $this->Hrm_model->get_duration_data();
+    $data['administrator'] = $this->Hrm_model->administrator_data();
+    $content = $this->parser->parse('hr/edit_timesheet', $data, true);
+    $this->template->full_admin_html_view($content);
+  }
 
 
 
@@ -4301,45 +4281,32 @@ public function payslip_setting() {
 
 
 
+public function employee_payslip_permission($id) {
+  $this->load->model('Hrm_model');
+  $CI = & get_instance();
+  $CI->load->model('Web_settings');
+  $data['title']            = display('Payment_Administration');
+  $data['time_sheet_data'] = $this->Hrm_model->time_sheet_data($id);
+  // var_dump($data['time_sheet_data']);
+  $data['employee_name'] = $this->Hrm_model->employee_name($data['time_sheet_data'][0]['templ_name']);
 
+  $data['designation'] = $this->db->select('designation')->from('employee_history')->where('id',$data['employee_name'][0]['id'])->get()->row()->designation;
+  //if(empty($data['employee_name'])){
+  $data['employee'] = $this->Hrm_model->employee_partner($data['time_sheet_data'][0]['templ_name']);
+  //  }
+  $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
+  $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+  $data['dailybreak'] = $this->Hrm_model->get_dailybreak();  
+  $data['duration'] = $this->Hrm_model->get_duration_data();
+  $data['setting_detail'] =$setting_detail;
+  $data['administrator'] = $this->Hrm_model->administrator_data();
+  
+  $data['extratime_info'] = $this->Hrm_model->get_overtime_data();
+  // print_r($data['employee']); die();
 
-
-
-
-
-
-
-
-
-    public function employee_payslip_permission($id) {
-        $this->load->model('Hrm_model');
-         $CI = & get_instance();
-         $CI->load->model('Web_settings');
-       $data['title']            = display('Payment_Administration');
-       $data['time_sheet_data'] = $this->Hrm_model->time_sheet_data($id);
-       $data['employee_name'] = $this->Hrm_model->employee_name($data['time_sheet_data'][0]['templ_name']);
-
-       $data['designation'] = $this->db->select('designation')->from('employee_history')->where('id',$data['employee_name'][0]['id'])->get()->row()->designation;
-        //if(empty($data['employee_name'])){
- $data['employee'] = $this->Hrm_model->employee_partner($data['time_sheet_data'][0]['templ_name']);
-
-    //  }
-       $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
-       $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
-       $data['dailybreak'] = $this->Hrm_model->get_dailybreak();  
-       $data['duration'] = $this->Hrm_model->get_duration_data();
-       $data['setting_detail'] =$setting_detail;
-       $data['administrator'] = $this->Hrm_model->administrator_data();
-       
-       $data['extratime_info'] = $this->Hrm_model->get_overtime_data();
-
-       
-
-      // print_r($data['employee']); die();
-   
-         $content                  = $this->parser->parse('hr/emp_payslip_permission', $data, true);
-         $this->template->full_admin_html_view($content);
-        }
+  $content = $this->parser->parse('hr/emp_payslip_permission', $data, true);
+  $this->template->full_admin_html_view($content);
+}
     
 
 
@@ -4743,32 +4710,28 @@ public function timesheed_inserted_data($id, $type) {
     
 
 
-                public function office_loan_delete($transaction_id){
+  public function office_loan_delete($transaction_id) {
+    $this->load->model('Hrm_model');
+    $this->Hrm_model->delete_off_loan($transaction_id);
+    $this->session->set_userdata(array('message' => display('successfully_delete')));
+    redirect("Chrm/manage_officeloan");
+  }
 
-                    $this->load->model('Hrm_model');
-                    $this->Hrm_model->delete_off_loan($transaction_id);
-                    $this->session->set_userdata(array('message' => display('successfully_delete')));
-                   redirect("Chrm/manage_officeloan");
-            
-                }
-            
-
-                
 
 // Manage Timesheet
 public function manage_timesheet() 
 {
-    $CI = & get_instance();
-    $CI->load->model('Web_settings');
-    $this->load->model('Hrm_model');
-    $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
-    $data['setting_detail']            = $setting_detail;
-    $data['title']            = 'Manage Timesheet';
-    $data['timesheet_list']    = $this->Hrm_model->timesheet_list();
-    $data['timesheet_data_get']    = $this->Hrm_model->timesheet_data_get();
-    $data['employee_data'] =$this->Hrm_model->employee_data_get();
-    $content  = $this->parser->parse('hr/timesheet_list', $data, true);
-    $this->template->full_admin_html_view($content);
+  $CI = & get_instance();
+  $CI->load->model('Web_settings');
+  $this->load->model('Hrm_model');
+  $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+  $data['setting_detail']            = $setting_detail;
+  $data['title']            = 'Manage Timesheet';
+  $data['timesheet_list']    = $this->Hrm_model->timesheet_list();
+  $data['timesheet_data_get']    = $this->Hrm_model->timesheet_data_get();
+  $data['employee_data'] =$this->Hrm_model->employee_data_get();
+  $content  = $this->parser->parse('hr/timesheet_list', $data, true);
+  $this->template->full_admin_html_view($content);
 }
 
 // Fetch data in Manage TimeSheet List - Madhu
@@ -4787,34 +4750,40 @@ public function manageTimesheetListData()
     $i              = $start + 1;
     $edit           = "";
     $delete         = "";
+
     foreach ($items as $item) { //echo "<pre>"; print_r($item); echo "</pre>"; die;
 
-    $user ='<a href="' . base_url("Chrm/employee_payslip_permission/" . $item["timesheet_id"]) . '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-user" aria-hidden="true"></i></a>';
+      $user ='<a href="' . base_url("Chrm/employee_payslip_permission/" . $item["timesheet_id"]) . '" class="btnclr btn btn-sm"><i class="fa fa-user" aria-hidden="true"></i></a>';
 
-    $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["timesheet_id"]."/timesheet") .
-            '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-download" aria-hidden="true"></i></a>';
+      $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["timesheet_id"]."/timesheet") .
+              '" class="btnclr btn btn-sm"><i class="fa fa-download" aria-hidden="true"></i></a>';
+
 
     $delete = '<a onClick="deleteTimesheetdata(' . $item["timesheet_id"] . ', \'' . $item["month"] . '\')" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
-    $status = $item['uneditable'] == 1 ? '<span class="green">Generated</span>' : '<span class="red">Pending</span>';
-        $row = [
-            'id'      => $i,
-            "first_name"    => $item["first_name"] .' '. $item["middle_name"].' '. $item["last_name"],
-            "job_title"  => $item["job_title"],
-            "payroll_type"  => $item["payroll_type"],
-            "month"         => $item["month"],
-            "total_hours"   => $item["total_hours"],
-            "uneditable"   => $status,
-            "action"   => $user . $download . $delete,
-        ];
-        $data[] = $row;
-        $i++;
+
+      $status = ($item['uneditable'] == 1) ? '<span class="green">Generated</span>' : '<span class="red">Pending</span>';
+
+      $edit = ($item['uneditable'] == 1) ? "" : '<a href="'.base_url("Chrm/edit_timesheet/").$item['timesheet_id'].'" class="btnclr btn btn-sm" title="Edit"> <i class="fa fa-edit"></i> </a>';
+      $row = [
+        'id'      => $i,
+        "first_name"    => $item["first_name"] .' '. $item["middle_name"].' '. $item["last_name"],
+        "job_title"  => $item["job_title"],
+        "payroll_type"  => $item["payroll_type"],
+        "month"         => $item["month"],
+        "total_hours"   => $item["total_hours"],
+        "uneditable"   => $status,
+        "action"   => $user ." ". $download ." ". $edit ." ". $delete,
+      ];
+      $data[] = $row;
+      $i++;
     }
+
     $response = [
-        "draw"            => $this->input->post("draw"),
-        "recordsTotal"    => $totalItems,
-        "recordsFiltered" => $totalItems,
-        "data"            => $data,
+      "draw"            => $this->input->post("draw"),
+      "recordsTotal"    => $totalItems,
+      "recordsFiltered" => $totalItems,
+      "data"            => $data,
     ];
     echo json_encode($response);
 }
@@ -4881,70 +4850,71 @@ public function manage_officeloan() {
 
 
 public function pay_slip() {
- //print_r($_POST);die();
-       $CI = & get_instance();
-       $CI->load->model('invoice_content');
-       $w = & get_instance();
-       $w->load->model('Ppurchases');
-       $company_info = $w->Ppurchases->retrieve_company();
-       $datacontent = $CI->invoice_content->retrieve_data();
-       $this->load->model('Hrm_model');
-       $data['title'] = display('pay_slip');
-       $data['business_name']=(!empty($datacontent[0]['company_name'])?$datacontent[0]['company_name']:$company_info[0]['company_name']);
-           $data['phone']=(!empty($datacontent[0]['mobile'])?$datacontent[0]['mobile']:$company_info[0]['mobile']);
-           $data['email']=(!empty($datacontent[0]['email'])?$datacontent[0]['email']:$company_info[0]['email']);
-           $data['address']=(!empty($datacontent[0]['address'])?$datacontent[0]['address']:$company_info[0]['address']);
-        $data_timesheet['total_hours'] = $this->input->post('total_net');
-        $data_timesheet['templ_name'] = $this->input->post('templ_name');
-        $data_timesheet['payroll_type'] = $this->input->post('payroll_type');
-        $data_timesheet['duration'] = $this->input->post('duration');
-        $data_timesheet['job_title'] = $this->input->post('job_title');
-        $data_timesheet['payment_term'] = $this->input->post('payment_term');
-        $data_timesheet['month'] = $this->input->post('date_range');
-        $date_split=explode(' - ',$this->input->post('date_range'));
-        $data_timesheet['start'] =  $date_split[0];
-        $data_timesheet['end'] =  $date_split[1];
+
+  $CI = & get_instance();
+  $CI->load->model('invoice_content');
+  $w = & get_instance();
+  $w->load->model('Ppurchases');
+  $company_info = $w->Ppurchases->retrieve_company();
+  $datacontent = $CI->invoice_content->retrieve_data();
+  $this->load->model('Hrm_model');
+  $data['title'] = display('pay_slip');
+  $data['business_name']=(!empty($datacontent[0]['company_name'])?$datacontent[0]['company_name']:$company_info[0]['company_name']);
+  $data['phone']=(!empty($datacontent[0]['mobile'])?$datacontent[0]['mobile']:$company_info[0]['mobile']);
+  $data['email']=(!empty($datacontent[0]['email'])?$datacontent[0]['email']:$company_info[0]['email']);
+  $data['address']=(!empty($datacontent[0]['address'])?$datacontent[0]['address']:$company_info[0]['address']);
+  $data_timesheet['total_hours'] = $this->input->post('total_net');
+  $data_timesheet['templ_name'] = $this->input->post('templ_name');
+  $data_timesheet['payroll_type'] = $this->input->post('payroll_type');
+  $data_timesheet['duration'] = $this->input->post('duration');
+  $data_timesheet['job_title'] = $this->input->post('job_title');
+  $data_timesheet['payment_term'] = $this->input->post('payment_term');
+  $data_timesheet['month'] = $this->input->post('date_range');
+  $date_split=explode(' - ',$this->input->post('date_range'));
+  $data_timesheet['start'] =  $date_split[0];
+  $data_timesheet['end'] =  $date_split[1];
         
- // Assuming $data_timesheet['start'] is set and contains a date in the format of 'd/m/Y'
-$start_date = $data_timesheet['start'];
-// Extract the month from the start date
-$month = date('m', strtotime(str_replace('/', '-', $start_date)));
-// Determine the quarter based on the month
-if ($month >= 1 && $month <= 3) {
-    $quarter = 'Q1';
-} elseif ($month >= 4 && $month <= 6) {
-    $quarter = 'Q2';
-} elseif ($month >= 7 && $month <= 9) {
-    $quarter = 'Q3';
-} elseif ($month >= 10 && $month <= 12) {
-    $quarter = 'Q4';
-} else {
-    // Handle unexpected case
-    $quarter = 'Unknown';
-}
-// Assign the quarter to the appropriate field in your data array
-$data_timesheet['quarter'] = $quarter;
-// Now $data_timesheet includes the quarter based on the start date
+  // Assuming $data_timesheet['start'] is set and contains a date in the format of 'd/m/Y'
+  $start_date = $data_timesheet['start'];
+  // Extract the month from the start date
+  $month = date('m', strtotime(str_replace('/', '-', $start_date)));
+  // Determine the quarter based on the month
+  if ($month >= 1 && $month <= 3) {
+      $quarter = 'Q1';
+  } elseif ($month >= 4 && $month <= 6) {
+      $quarter = 'Q2';
+  } elseif ($month >= 7 && $month <= 9) {
+      $quarter = 'Q3';
+  } elseif ($month >= 10 && $month <= 12) {
+      $quarter = 'Q4';
+  } else {
+      // Handle unexpected case
+      $quarter = 'Unknown';
+  }
+  // Assign the quarter to the appropriate field in your data array
+  $data_timesheet['quarter'] = $quarter;
+  // Now $data_timesheet includes the quarter based on the start date
          
-       $data_timesheet['timesheet_id'] =  $this->input->post('tsheet_id');
-       $data_timesheet['create_by'] =$this->session->userdata('user_id');
-       $data_timesheet['admin_name'] = (!empty($this->input->post('administrator_person',TRUE))?$this->input->post('administrator_person',TRUE):'');
-       $data_timesheet['payment_method'] =(!empty($this->input->post('payment_method',TRUE))?$this->input->post('payment_method',TRUE):'');
-       $data_timesheet['cheque_no'] =(!empty($this->input->post('cheque_no',TRUE))?$this->input->post('cheque_no',TRUE):'');
-       $data_timesheet['cheque_date'] =(!empty($this->input->post('cheque_date',TRUE))?$this->input->post('cheque_date',TRUE):'');
-           $data_timesheet['bank_name'] =(!empty($this->input->post('bank_name',TRUE))?$this->input->post('bank_name',TRUE):'');
-           $data_timesheet['payment_ref_no'] =(!empty($this->input->post('payment_refno',TRUE))?$this->input->post('payment_refno',TRUE):'');
-       if(!empty($this->input->post('administrator_person',TRUE))){
-            $data_timesheet['uneditable']=1;
-       }else{
-             $data_timesheet['uneditable']=0;
-       }
-       $u_id=$this->input->post('unique_id');
-     //  if(empty($u_id)){
-        $data_timesheet['unique_id']=$u_id;
-     //  }
+  $data_timesheet['timesheet_id'] =  $this->input->post('tsheet_id');
+  $data_timesheet['create_by'] =$this->session->userdata('user_id');
+  $data_timesheet['admin_name'] = (!empty($this->input->post('administrator_person',TRUE))?$this->input->post('administrator_person',TRUE):'');
+  $data_timesheet['payment_method'] =(!empty($this->input->post('payment_method',TRUE))?$this->input->post('payment_method',TRUE):'');
+  $data_timesheet['cheque_no'] =(!empty($this->input->post('cheque_no',TRUE))?$this->input->post('cheque_no',TRUE):'');
+  $data_timesheet['cheque_date'] =(!empty($this->input->post('cheque_date',TRUE))?$this->input->post('cheque_date',TRUE):'');
+  $data_timesheet['bank_name'] =(!empty($this->input->post('bank_name',TRUE))?$this->input->post('bank_name',TRUE):'');
+  $data_timesheet['payment_ref_no'] =(!empty($this->input->post('payment_refno',TRUE))?$this->input->post('payment_refno',TRUE):'');
+  if(!empty($this->input->post('administrator_person',TRUE))){
+    $data_timesheet['uneditable']=1;
+  }else{
+    $data_timesheet['uneditable']=0;
+  }
+  $u_id=$this->input->post('unique_id');
+  //  if(empty($u_id)){
+  $data_timesheet['unique_id']=$u_id;
+  //  }
   $employee_detail = $this->db->where('id', $this->input->post('templ_name'));
   $q=$this->db->get('employee_history');
+
       //echo $this->db->last_query();
        $row = $q->row_array();
    if(!empty($row['id'])){
@@ -4983,100 +4953,105 @@ $data['job_title']=$row['designation'];
 
       $this->db->insert('timesheet_info', $data_timesheet);
 
+
+  $present1 = $this->input->post('block');
+  $date1 = $this->input->post('date');
+  $day1 = $this->input->post('day');
+  $time_start1 = $this->input->post('start');
+  $time_end1 = $this->input->post('end');
+  $hours_per_day1 = $this->input->post('sum');
+  $daily_bk1=$this->input->post('dailybreak');
+  $purchase_id_1 = $this->db->where('templ_name', $this->input->post('templ_name'))->where('timesheet_id',$data_timesheet['timesheet_id']);
+  $q=$this->db->get('timesheet_info');
+  //  echo $this->db->last_query();
+  $row = $q->row_array();
+  //    echo $row['timesheet_id'];
+  $old_id=trim($row['timesheet_id']);
+  
+  if(!empty($old_id)){
+    $this->session->set_userdata("timesheet_id_old",$row['timesheet_id']);
+    $this->db->where('timesheet_id', $this->session->userdata("timesheet_id_old"));
+    $this->db->delete('timesheet_info');
+    //  echo $this->db->last_query();
+    $this->db->where('timesheet_id', $this->session->userdata("timesheet_id_old"));
+    $this->db->delete('timesheet_info_details');
+    //  echo $this->db->last_query();
+    $this->db->insert('timesheet_info', $data_timesheet);
     // echo $this->db->last_query(); .;
+
 
   }
    else{
    logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
+
    $this->db->insert('timesheet_info', $data_timesheet);
-
-//  echo $this->db->last_query();    .;
-
-   }
+  //  echo $this->db->last_query();    .;
+  }
    $purchase_id_2 = $this->db->select('timesheet_id')->from('timesheet_info')->where('templ_name',$this->input->post('templ_name'))->where('month', $this->input->post('date_range'))->get()->row()->timesheet_id;
- //  echo $this->db->last_query();
-   $this->session->set_userdata("timesheet_id_new",$purchase_id_2);
-   
-    // echo $this->db->last_query();
-    if(empty($date1)){
-         $data1 = array(
-             'timesheet_id' =>$this->session->userdata("timesheet_id_new")
+  //  echo $this->db->last_query();
+  $this->session->set_userdata("timesheet_id_new",$purchase_id_2);
+  // echo $this->db->last_query();
+  if(empty($date1)){
+    $data1 = array(
+      'timesheet_id' =>$this->session->userdata("timesheet_id_new")
     );
-        $this->db->insert('timesheet_info_details', $data1); 
-        // echo $this->db->last_query();  .;
+    $this->db->insert('timesheet_info_details', $data1); 
+    // echo $this->db->last_query();  .;
     }else{
-        for ($i = 0, $n = count($date1); $i < $n; $i++) {
-        
-        
-          $present =  $present1[$i];
-
-        
-          $date = $date1[$i];
-           $day = $day1[$i];
-           $time_start = $time_start1[$i];
-            $daily_bk = $daily_bk1[$i];
-           $time_end = $time_end1[$i];
-           $hours_per_day = $hours_per_day1[$i];
-           $data1 = array(
-             'timesheet_id' =>$this->session->userdata("timesheet_id_new"),
-               
-               'present'    => $present,
-
-               'Date'    => $date,
-               'Day'      => $day,
-               'time_start'  => $time_start,
-                'daily_break'  =>$daily_bk,
-               'time_end'   =>  $time_end,
-               'hours_per_day' => $hours_per_day,
-               'created_by' => $this->session->userdata('user_id')
-       );
-          $this->db->insert('timesheet_info_details', $data1);
-        //  echo $this->db->last_query();  .;
-
-
-
-
- //echo $this->db->last_query();
-   // $content = $this->parser->parse('hr/pay_slip', $data, true);
-   // $this->template->full_admin_html_view($content);
+      for ($i = 0, $n = count($date1); $i < $n; $i++) {
+        $present =  $present1[$i];        
+        $date = $date1[$i];
+        $day = $day1[$i];
+        $time_start = $time_start1[$i];
+        $daily_bk = $daily_bk1[$i];
+        $time_end = $time_end1[$i];
+        $hours_per_day = $hours_per_day1[$i];
+        $data1 = array(
+          'timesheet_id' =>$this->session->userdata("timesheet_id_new"),
+            'present'    => $present,
+            'Date'    => $date,
+            'Day'      => $day,
+            'time_start'  => $time_start,
+            'daily_break'  =>$daily_bk,
+            'time_end'   =>  $time_end,
+            'hours_per_day' => $hours_per_day,
+            'created_by' => $this->session->userdata('user_id')
+        );
+        $this->db->insert('timesheet_info_details', $data1);
+    // $content = $this->parser->parse('hr/pay_slip', $data, true);
+    // $this->template->full_admin_html_view($content);
    }//.;
-//   die();
-    }//.;
-       $data['employee_data'] = $this->Hrm_model->employee_info($this->input->post('templ_name'));
-       $data['timesheet_data'] = $this->Hrm_model-> timesheet_info_data($this->session->userdata("timesheet_id_new"));
-   
-   
-    
-       $timesheetdata =$data['timesheet_data'];
-       $employeedata  =$data['employee_data'];
-       $hrate= $data['employee_data'][0]['hrate'];
-       $total_hours=  $data['timesheet_data'][0]['total_hours'];
-                     $payperiod =$data['timesheet_data'][0]['month'];
-                    $get_date = explode('-', $payperiod);
-         $d1 = $get_date[1];
-      $data['sc']=$this->Hrm_model->sc_info_count($data['employee_data'][0]['id'],$payperiod);
 
-      $scValue =  $data['sc']['sc'][0]['sc']; // Accessing 'sc=12'
-       $sc_totalAmount1 = $data['sc']['total_gtotal']; // Accessing total amount
+  }//.;
+    $data['employee_data'] = $this->Hrm_model->employee_info($this->input->post('templ_name'));
+    $data['timesheet_data'] = $this->Hrm_model-> timesheet_info_data($this->session->userdata("timesheet_id_new"));
+
+    $timesheetdata =$data['timesheet_data'];
+    $employeedata  =$data['employee_data'];
+    $hrate= $data['employee_data'][0]['hrate'];
+    $total_hours=  $data['timesheet_data'][0]['total_hours'];
+    $payperiod =$data['timesheet_data'][0]['month'];
+    $get_date = explode('-', $payperiod);
+    $d1 = $get_date[1];
+    $data['sc']=$this->Hrm_model->sc_info_count($data['employee_data'][0]['id'],$payperiod);
+    $scValue =  $data['sc']['sc'][0]['sc']; // Accessing 'sc=12'
+    $sc_totalAmount1 = $data['sc']['total_gtotal']; // Accessing total amount
        
-$sc_count = $data['sc']['count'];
-$scValue = $scValue / 100;
-//echo "SC :". $scValueAmount1;
-// Calculate the percentage of $sc_totalAmount1 based on $scValue
-$scValueAmount1 = $scValue * $sc_totalAmount1;
+    $sc_count = $data['sc']['count'];
+    $scValue = $scValue / 100;
+    //echo "SC :". $scValueAmount1;
+    // Calculate the percentage of $sc_totalAmount1 based on $scValue
+    $scValueAmount1 = $scValue * $sc_totalAmount1;
 
+  if($data['timesheet_data'][0]['payroll_type']=='Hourly') {
+      $limit_hours = '40:00';
+      list($totalH, $totalM) = explode(':', $total_hours);
+      $totalMinutes = ($totalH * 60) + (int)$totalM;
+      list($limitH, $limitM) = explode(':', $limit_hours);
+      $limitMinutes = ($limitH * 60) + (int)$limitM;
+  
+      list($hours, $minutes) = explode(':', $total_hours);
 
-if($data['timesheet_data'][0]['payroll_type']=='Hourly'){
-   $limit_hours = '40:00';
-  list($totalH, $totalM) = explode(':', $total_hours);
-$totalMinutes = ($totalH * 60) + (int)$totalM;
-list($limitH, $limitM) = explode(':', $limit_hours);
-$limitMinutes = ($limitH * 60) + (int)$limitM;
- 
-  list($hours, $minutes) = explode(':', $total_hours);
-
-// Convert total hours to decimal hours
-$decimal_hours = $hours + ($minutes / 60);
 
 // Calculate total cost
 $total_cost = $hrate * $decimal_hours;
@@ -5122,6 +5097,50 @@ if ($total_hours <= 60) {
 }
 
 
+      // Calculate total cost
+      $total_cost = $hrate * $decimal_hours;
+      if ($total_hours <= $limit_hours) {
+        $final = ($total_cost) + $scValueAmount1;
+        //echo "IF : ".$final;
+      } else {
+        $final = $data['timesheet_data'][0]['extra_thisrate'] + $data['timesheet_data'][0]['above_extra_sum'];
+        //////  echo "Else : ".$final;
+      }
+  }else if ($data['timesheet_data'][0]['payroll_type']=='Salaried-BiWeekly'){
+      if ($total_hours <= 14) {
+        $final = ($total_cost) + $scValueAmount1;
+        //echo "IF : ".$final;
+      } else {
+        $final = $data['timesheet_data'][0]['extra_thisrate'] + $data['timesheet_data'][0]['above_extra_sum'];
+        //////  echo "Else : ".$final;
+      }
+  }else if ($data['timesheet_data'][0]['payroll_type']=='Salaried-weekly'){
+      if ($total_hours <= 7) {
+        $final = ($total_cost) + $scValueAmount1;
+        //echo "IF : ".$final;
+      } else {
+        $final = $data['timesheet_data'][0]['extra_thisrate'] + $data['timesheet_data'][0]['above_extra_sum'];
+        //////  echo "Else : ".$final;
+      }
+  }else if ($data['timesheet_data'][0]['payroll_type']=='Salaried-Monthly'){
+      if ($total_hours <= 30) {
+        $final = ($total_cost) + $scValueAmount1;
+        //echo "IF : ".$final;
+      } else {
+        $final = $data['timesheet_data'][0]['extra_thisrate'] + $data['timesheet_data'][0]['above_extra_sum'];
+        //////  echo "Else : ".$final;
+      }
+  }else if ($data['timesheet_data'][0]['payroll_type']=='Salaried-BiMonthly'){
+      if ($total_hours <= 60) {
+        $final = ($total_cost) + $scValueAmount1;
+        //echo "IF : ".$final;
+      } else {
+        $final = $data['timesheet_data'][0]['extra_thisrate'] + $data['timesheet_data'][0]['above_extra_sum'];
+        //////  echo "Else : ".$final;
+      }
+  }
+
+
 
 
 //  $final=($hrate *$total_hours)+$scValueAmount1;
@@ -5130,90 +5149,65 @@ if ($total_hours <= 60) {
     
     
           $federal_tax = $this->db->select('*')->from('federal_tax')->where('tax','Federal Income tax')->get()->result_array();
-    
-    
-          // print_r($federal_tax); die();
-
-          $federal_range='';
-       $f_tax='';
-       foreach($federal_tax as $amt){
-          $split=explode('-',$amt[$data['employee_data'][0]['employee_tax']]);
-           if($final > $split[0] && $final < $split[1]){
-             $federal_range=$split[0]."-".$split[1];
-           }
-           }
-       $data['federal'] = $this->Hrm_model->federal_tax_info($data['employee_data'][0]['employee_tax'],$final,$federal_range);
-       if(!empty($data['federal'])){
-       $Federal_employee= $data['federal'][0]['employee'];
-        $f=($Federal_employee/100)*$final;
-         $f= round($f, 2);
- 
-           $ar = $this->db->select('f_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->f_tax;
-            
-           $f_tax=$ar+$f;
-
-        
-       }
-
-
-
-
-       //Social Security
-       $social_tax = $this->db->select('*')->from('federal_tax')->where('tax','Social Security')->get()->result_array();
-  
-      //  print_r($federal_tax); die();
-
-       $social_range='';
-       $s_tax='';
-           $split=explode('-',$social_tax[0][$data['employee_data'][0]['employee_tax']]);
-           if($final > $split[0] && $final < $split[1]){
-           $social_range=$split[0]."-".$split[1];
-           }
-            // print_r($social_tax[0][$data['employee_data'][0]['employee_tax']]);  
-
-
-       $data['social'] = $this->Hrm_model->social_tax_info($data['employee_data'][0]['employee_tax'],$final,$social_range);
-       if(!empty($data['social'][0]['employee'])){
-             $social_employee= $data['social'][0]['employee'];
-             $s=($social_employee/100)*$final;
-             $s= round($s, 2);
-             $ar = $this->db->select('s_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->s_tax;
-             $s_tax=$ar+$s;     
-           }
-
-
- 
-
-          //Medicare
-       $Medicare = $this->db->select('*')->from('federal_tax')->where('tax','Medicare')->get()->result_array();
-    
-      //  print_r($federal_tax); die();
 
     
-       $Medicare_range='';
-       $m_tax='';
-       foreach($Medicare as $social_amt){
-          $split=explode('-',$social_amt[$data['employee_data'][0]['employee_tax']]);
-           if($final > $split[0] && $final < $split[1]){
-          $Medicare_range=$split[0]."-".$split[1];
-           }
-           }
-       $data['Medicare'] = $this->Hrm_model->Medicare_tax_info($data['employee_data'][0]['employee_tax'],$final,$Medicare_range);
-       if(!empty($data['Medicare'])){
-       $Medicare_employee= $data['Medicare'][0]['employee'];
-       $m=($Medicare_employee/100)*$final;
-        $m= round($m, 2);
-    $ar = $this->db->select('m_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->m_tax;
-        
-       
-           $m_tax=$ar+$m;
-           
+  $federal_tax = $this->db->select('*')->from('federal_tax')->where('tax','Federal Income tax')->get()->result_array();
+
+  $federal_range='';
+  $f_tax='';
+  foreach($federal_tax as $amt){
+    $split=explode('-',$amt[$data['employee_data'][0]['employee_tax']]);
+      if($final > $split[0] && $final < $split[1]){
+        $federal_range=$split[0]."-".$split[1];
       }
+  }
+  $data['federal'] = $this->Hrm_model->federal_tax_info($data['employee_data'][0]['employee_tax'],$final,$federal_range);
+  if(!empty($data['federal'])){
+    $Federal_employee= $data['federal'][0]['employee'];
+    $f=($Federal_employee/100)*$final;
+    $f= round($f, 2);
+    $ar = $this->db->select('f_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->f_tax;
+    $f_tax=$ar+$f;
+  }
 
+  //Social Security
+  $social_tax = $this->db->select('*')->from('federal_tax')->where('tax','Social Security')->get()->result_array();
+  
+  $social_range='';
+  $s_tax='';
+  $split=explode('-',$social_tax[0][$data['employee_data'][0]['employee_tax']]);
+  if($final > $split[0] && $final < $split[1]){
+    $social_range=$split[0]."-".$split[1];
+  }
 
+  $data['social'] = $this->Hrm_model->social_tax_info($data['employee_data'][0]['employee_tax'],$final,$social_range);
+  if(!empty($data['social'][0]['employee'])){
+    $social_employee= $data['social'][0]['employee'];
+    $s=($social_employee/100)*$final;
+    $s= round($s, 2);
+    $ar = $this->db->select('s_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->s_tax;
+    $s_tax=$ar+$s;     
+  }
 
-
-
+  //Medicare
+  $Medicare = $this->db->select('*')->from('federal_tax')->where('tax','Medicare')->get()->result_array();
+    
+  $Medicare_range='';
+  $m_tax='';
+  foreach($Medicare as $social_amt){
+    $split=explode('-',$social_amt[$data['employee_data'][0]['employee_tax']]);
+    if($final > $split[0] && $final < $split[1]){
+      $Medicare_range=$split[0]."-".$split[1];
+    }
+  }
+  $data['Medicare'] = $this->Hrm_model->Medicare_tax_info($data['employee_data'][0]['employee_tax'],$final,$Medicare_range);
+  if(!empty($data['Medicare'])){
+    $Medicare_employee= $data['Medicare'][0]['employee'];
+    $m=($Medicare_employee/100)*$final;
+    $m= round($m, 2);
+    $ar = $this->db->select('m_tax')->from('tax_history')->where('employee_id',$this->input->post('templ_name'))->get()->row()->m_tax;
+    $m_tax=$ar+$m;
+  }
                   //  Workeddddddd
 
      
@@ -5233,7 +5227,9 @@ if (!$result) {
     echo "Query execution error: " . $error['message'];
 } else {
     $weekly_tax = $result->result_array();
+
     // echo $this->db->last_query();
+
 }
        
 
@@ -5296,6 +5292,7 @@ if($data['selected_state_local_tax'] !=''){
 
 
 $state_tax = $this->db->select('*')->from('state_and_tax')->where('state',$data['selected_state_local_tax'])->where('created_by',$this->session->userdata('user_id'))->get()->result_array();
+
 $state= $this->db->select('*')->from('state_and_tax')->where('state',$state_tax[0]['state'])->get()->result_array();
 // print_r($state);  die();
 
@@ -5509,7 +5506,9 @@ echo "STATE TAX";
 echo "<br/>";  
 
 $state_tax1 = $this->db->select('*')->from('state_and_tax')->where('state',$data['selected_state_tax'])->where('created_by',$this->session->userdata('user_id'))->get()->result_array();
+
 // echo $this->db->last_query();
+
 
 // echo '<br>'; .;
 
@@ -5528,6 +5527,7 @@ foreach($tax_split1 as $tax){
 
 
    $tax=$this->db->select('*')->from('state_localtax')->where('tax',$state_tax1[0]['state']."-".$tax)->where('create_by',$this->session->userdata('user_id'))->get()->result_array();
+
 
 
 foreach($tax as $tx){
@@ -5704,30 +5704,31 @@ $data1 = array(
 
   $payperiod =$data['timesheet_data'][0]['month'];
        $data['sc']=$this->Hrm_model->sc_info_count($this->input->post('templ_name'),$payperiod);
-        $scValue =  $data['sc']['sc'][0]['sc']; // Accessing 'sc=12'
+        $scValue =  (float)$data['sc']['sc'][0]['sc']; // Accessing 'sc=12'
        $sc_totalAmount1 = $data['sc']['total_gtotal']; // Accessing total amount
 $sc_count = $data['sc']['count'];
-$scValuePercentage = ($scValue / $sc_totalAmount1) * 100;
-//  print_r($data['sc']);
-$sc_totalAmount = ($scValuePercentage / 100) * $sc_totalAmount1;
- 
 
-if (is_nan($scValuePercentage)) {
+if($sc_totalAmount1 > 0) {
+  $scValuePercentage = ($scValue / $sc_totalAmount1) * 100;
+  $sc_totalAmount = ($scValuePercentage / 100) * $sc_totalAmount1;
+
+  if (is_nan($scValuePercentage)) {
     $scValuePercentage = 0; // Set $scValuePercentage to 0 if it's NaN
+  }
 }
 
 
 
 
 $data2 = array(
-           's_tax'=>$s,
-           'm_tax'=>$m,
-           'u_tax'=>$u,
-           'f_tax'=>$f,
-           'sc' => $scValue ,
-           'no_of_inv' => $countValue,
-           'tax'  => $tx_n,
-           'sales_c_amount' => $sales_amount,
+        's_tax'=>$s,
+        'm_tax'=>$m,
+        'u_tax'=>$u,
+        'f_tax'=>$f,
+        'sc' => $scValue ,
+        'no_of_inv' => $countValue,
+        'tax'  => $tx_n,
+        'sales_c_amount' => $sales_amount,
        'total_amount'          => $final,
        'timesheet_id'   => $timesheetdata[0]['timesheet_id'],
        'total_hours'    => $timesheetdata[0]['total_hours'],
@@ -6013,57 +6014,29 @@ $this->template->full_admin_html_view($content);
     }
 
 
-public function payroll_setting() {
-      $CI = & get_instance();
-      $CI->load->model('Web_settings');
-      $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
- $data['timesheet_data_emp'] =  $CI->Hrm_model->timesheet_data_emp();
+  public function payroll_setting() {
+    $CI = & get_instance();
+    $CI->load->model('Web_settings');
+
+    $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+    $data['timesheet_data_emp'] =  $CI->Hrm_model->timesheet_data_emp();
     $data['setting_detail'] = $setting_detail;
-    $data['states_list'] = $this->db->select("state, tax")
-    ->from('state_and_tax')
-    ->where('created_by', $this->session->userdata('user_id'))
-    ->where('Type', 'State')
-    ->get()
-    ->result_array();
-     $data['city_list'] = $this->db->select("state, tax")
-     ->from('state_and_tax')
-     ->where('created_by', $this->session->userdata('user_id'))
-     ->where('Type', 'City')
-     ->get()
-     ->result_array();
-     $data['county_list'] = $this->db->select("state, tax")
-     ->from('state_and_tax')
-     ->where('created_by', $this->session->userdata('user_id'))
-     ->where('Type', 'County')
-     ->get()
-     ->result_array();
-     $data['title'] = display('federal_taxes');
 
+    $data['states_list'] = $CI->Hrm_model->getDatas('state_and_tax', '*', ['Type' => 'State', 'created_by' => $this->session->userdata('user_id')]);
+    $data['city_list'] = $CI->Hrm_model->getDatas('state_and_tax', '*', ['Type' => 'City', 'created_by' => $this->session->userdata('user_id')]);
+    $data['county_list'] = $CI->Hrm_model->getDatas('state_and_tax', '*', ['Type' => 'County', 'created_by' => $this->session->userdata('user_id')]);
+    
+    $data['title'] = display('federal_taxes');
+    $data['get_data_salespartner'] = $CI->Hrm_model->get_data_salespartner();
+    $data['get_data_salespartner_another'] = $CI->Hrm_model->get_data_salespartner_another();
 
+    // Merge the two arrays into one
+    $data['merged_data_salespartner'] = array_merge($data['get_data_salespartner'], $data['get_data_salespartner_another']);
 
-
-  $data['get_data_salespartner'] = $CI->Hrm_model->get_data_salespartner();
-  $data['get_data_salespartner_another'] = $CI->Hrm_model->get_data_salespartner_another();
-
-  // Merge the two arrays into one
-//   print_r($data['get_data_salespartner']);
-//   echo "<br/>";
-//   print_r($data['get_data_salespartner_another']);die();
-  $data['merged_data_salespartner'] = array_merge($data['get_data_salespartner'], $data['get_data_salespartner_another']);
-  //print_r( $data['merged_data_salespartner']);die();
-    $data['state_selected'] = $this->db->select("state,tax")->from('state_and_tax')->where('Status',1)->where('created_by',$this->session->userdata('user_id'))->get()->result_array();
-     $content = $this->parser->parse('hr/federal_taxes', $data, true);
+    $data['state_selected'] = $CI->Hrm_model->getDatas('state_and_tax', '*', ['Status' => 1, 'created_by' => $this->session->userdata('user_id')]);
+    $content = $this->parser->parse('hr/federal_taxes', $data, true);
     $this->template->full_admin_html_view($content);
-    }
-
-
-
-
-
-
-
-
-
+  }
 
 
 
@@ -6302,27 +6275,22 @@ $data['setting_detail'] = $setting_detail;
 
 
  public function add_timesheet() {
-    $data['title'] = display('add_timesheet');
-    
-        $CI = & get_instance();
-        $this->load->model('Hrm_model');
 
-        $CI->load->model('Web_settings');
+  $data['title'] = display('add_timesheet');
+  $CI = & get_instance();
+  $this->load->model('Hrm_model');
+  $CI->load->model('Web_settings');
 
-        $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
-        $data['employee_name'] = $this->Hrm_model->employee_name1();
+  $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+  $data['employee_name'] = $this->Hrm_model->employee_name1();
+  $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
+  $data['setting_detail'] = $setting_detail;
+  $data['dailybreak'] = $this->Hrm_model->get_dailybreak();
+  $data['duration'] = $this->Hrm_model->get_duration_data();
 
-         $data['payment_terms'] = $this->Hrm_model->get_payment_terms();
-    
-         $data['setting_detail'] = $setting_detail;
-
-        $data['dailybreak'] = $this->Hrm_model->get_dailybreak();
-        
-        $data['duration'] = $this->Hrm_model->get_duration_data();
-    
-        $content = $this->parser->parse('hr/add_timesheet', $data, true);
-        $this->template->full_admin_html_view($content);
-        }
+  $content = $this->parser->parse('hr/add_timesheet', $data, true);
+  $this->template->full_admin_html_view($content);
+}
     
     
     
@@ -7485,21 +7453,18 @@ public function form1099nec()
 
 
 
-    public function employee_details($id) {
+  public function employee_details($id) {
     $CI = & get_instance();
-
     $CI->load->model('Web_settings');
     $this->load->model('Hrm_model');
-
     $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
 
-    $data['setting_detail']            = $setting_detail;
-
-     $data['title']            = display('employee_update');
-     $data['row']              = $this->Hrm_model->employee_detl($id);
-      $content                  = $this->parser->parse('hr/resumepdf', $data, true);
-     $this->template->full_admin_html_view($content);
-    }
+    $data['setting_detail'] = $setting_detail;
+    $data['title']          = display('employee_update');
+    $data['row']            = $this->Hrm_model->employee_detl($id);
+    $content                = $this->parser->parse('hr/resumepdf', $data, true);
+    $this->template->full_admin_html_view($content);
+  }
 
   // create employee
   public function create_employee(){
@@ -7893,6 +7858,31 @@ public function manage_workinghours()
         redirect(base_url("Chrm/working_hours"));
     }
 
+
+    public function week_setting() {
+      $CI = & get_instance();
+      $CI->load->model('Web_settings');
+      $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+      $data['timesheet_data_emp'] =  $CI->Hrm_model->timesheet_data_emp();
+      $data['setting_detail'] = $setting_detail;
+      $data['title'] = display('federal_taxes');
+      $content = $this->parser->parse('hr/week_setting', $data, true);
+      $this->template->full_admin_html_view($content);
+    }
+
+    public function save_week_setting() {
+      $CI = & get_instance();
+      $uid = $this->session->userdata('user_id');
+      $start_week = $this->input->post('start_week');
+      $end_week = $this->input->post('end_week');
+      $CI->Hrm_model->updateData('web_setting', ['start_week' => $start_week, 'end_week' => $end_week], ['create_by' => $uid]);
+      $this->session->set_flashdata("message", display("successfully_updated"));
+      redirect(base_url("Chrm/week_setting"));
+    }
+
+    
+
+
     // Log Data Table List
     public function logIndexData()
     {
@@ -7947,4 +7937,5 @@ public function manage_workinghours()
         ];
         echo json_encode($response);
     }
+
 }

@@ -95,7 +95,7 @@
                            <div class="col-md-3">
                            <label for="end_week">End Week</label>
                               <select class="form-control" name="end_week" id="end_week" tabindex="6">
-                              <?php
+                                 <?php
                                     foreach($weeks as $week) {
                                  ?>
                                     <option value="<?= $week ?>" <?= (!empty($end_week) && ($end_week == $week)) ? 'selected' : ''; ?>><?= $week; ?></option>
