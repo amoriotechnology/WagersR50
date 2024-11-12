@@ -201,11 +201,11 @@ th,td{
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height:50px;">
                         <div class="panel-title">
-                            <a style="float:right;color:white;" href="<?= base_url('Chrm/manage_timesheet') ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?= "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
                   
-                    <?= form_open_multipart('Chrm/pay_slip', 'id="validate"'); ?>
+                    <?php echo form_open_multipart('Chrm/pay_slip?id=' . $_GET['id'], 'id="validate"'); ?>
                   
                     <div class="panel-body">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
@@ -216,6 +216,7 @@ th,td{
                                 <div class="col-sm-6">
                                     <input  type="hidden" readonly id="tsheet_id" value="<?= $time_sheet_data[0]['timesheet_id'];?>" name="tsheet_id" />
                                     <input  type="hidden" readonly id="unique_id" value="<?= $time_sheet_data[0]['unique_id'];?>" name="unique_id" />          
+                                    <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                                     <select name="templ_name" <?php if($time_sheet_data[0]['uneditable']==1){ echo 'disabled';}  ?> id="templ_name" class="form-control"    tabindex="3" style="width100">
                                         <option value="<?= $employee_name[0]['id'] ;?>"> <?= $employee_name[0]['first_name']." ".$employee_name[0]['last_name'] ?></option>
                                     </select>

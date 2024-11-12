@@ -136,7 +136,7 @@
             <div class="panel-body">
                <?php   if($template==1){ ?>
                <p align="right">  <a id="download" style="color:white;background-color:#38469f;" class='btn btn-primary'> <i class="fa fa-download"></i><?php echo display('Download') ?></a>  
-                  <a id="mange" style="color:white;background-color:#38469f;" href="<?php  echo  base_url()  ?>/Chrm/pay_slip_list"  class='btn btn-primary'><?php echo "Manage Pay Slip" ?></a>  
+                  <a id="mange" style="color:white;background-color:#38469f;" href="<?php echo base_url('Chrm/pay_slip_list?id=' . $_GET['id']); ?>"  class='btn btn-primary'><?php echo "Manage Pay Slip" ?></a>  
                </p>
                <div  id="content" style="margin-left:12px;padding:10px;">
                   <div class="row" style="padding:0px;width:780px;">
@@ -1153,7 +1153,8 @@ currentElement.textContent = '-' + value;
                   } 
                </style>
                <p align="right">  <a id="download" style="color:white;background-color:#38469f;" class='btn btn-primary'> <i class="fa fa-download"></i><?php echo display('Download') ?></a>  
-                  <a id="mange" style="color:white;background-color:#38469f;" href="<?php  echo  base_url()  ?>/Chrm/pay_slip_list"  class='btn btn-primary'><?php echo "Manage Pay Slip" ?></a>  
+
+               <a id="mange" style="color:white;background-color:#38469f;" href="<?php echo base_url('Chrm/pay_slip_list?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage Pay Slip" ?> </a>
                </p>
               <div  id="content" style="margin-left:12px;padding:10px;">
                   <div class="row" style="padding:0px;width:780px;">

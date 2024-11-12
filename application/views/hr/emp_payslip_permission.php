@@ -210,12 +210,12 @@ th,td{
             <div class="panel panel-bd lobidrag">
                 <div class="panel-heading" style="height:50px;">
                     <div class="panel-title">
-                        <a style="float:right;background-color:#38469f;color:white;" href="<?= base_url('Chrm/manage_timesheet') ?>" class="btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?= "Manage TimeSheet" ?> </a>
+                        <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                     </div>
                 </div>
                 <?php // echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
                 <!-- <form id="insert_timesheet"  method="post">   -->                  
-                <?= form_open_multipart('Chrm/second_pay_slip','id="validate"' ) ?>
+                <?= form_open_multipart('Chrm/second_pay_slip?id=' . $_GET['id'],'id="validate"' ) ?>
 
                 <div class="panel-body">
                     <div class="form-group row">
@@ -236,6 +236,8 @@ th,td{
                             <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                             <div class="col-sm-6">
                                 <input type="text" name="job_title" id="job_title" readonly placeholder="Job title" value="<?= empty($employee_name[0]['designation']) ? 'Sales Partner' : $employee_name[0]['designation']; ?>" class="form-control">
+
+                                <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                             </div>
                         </div>
                     </div>

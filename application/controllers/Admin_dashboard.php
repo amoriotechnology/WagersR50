@@ -1,5 +1,7 @@
 <?php
 
+// error_reporting(1);
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -1255,8 +1257,6 @@ window.history.go(-2);
 
     public function login() {
 
-
-        
         if ($this->auth->is_logged()) {
             $this->output->set_header("Location: " . base_url() . 'Admin_dashboard', TRUE, 302);
         }
@@ -1283,6 +1283,7 @@ $sql='select * from user_login where username="'.$_POST['username'].'"';
 
 
 $query=$this->db->query($sql);
+
 
 $row=$query->result_array();
 $user_id=$row[0]['user_id']; 
@@ -1410,7 +1411,7 @@ $sale=array();$product=array();
         $error = '';
         $setting_detail = $this->Web_settings->retrieve_setting_editdata();
 
-        if ($setting_detail[0]['captcha'] == 0 && $setting_detail[0]['secret_key'] != null && $setting_detail[0]['site_key'] != null) {
+        if (isset($setting_detail[0]['captcha']) == 0 && isset($setting_detail[0]['secret_key']) != '' && isset($setting_detail[0]['site_key']) != '') {
 
             $this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_validate_captcha');
             $this->form_validation->set_message('validate_captcha', 'Please check the the captcha form');
@@ -1439,7 +1440,6 @@ $sale=array();$product=array();
              
             $username =  $this->session->userdata('username');
             $password = $this->session->userdata('password');
-            
             if ($username == '' || $password == '' || $this->auth->login($username, $password) === FALSE) {
                 $error = display('wrong_username_or_password');
             }
@@ -1448,6 +1448,7 @@ $sale=array();$product=array();
         }
         $this->session->unset_userdata('username');
         $this->session->unset_userdata('password');
+
             if ($error != '') {
                 $this->session->set_userdata(array('error_message' => $error));
                 $this->output->set_header("Location: " . base_url() . 'Admin_dashboard/login', TRUE, 302);
@@ -1459,6 +1460,8 @@ $sale=array();$product=array();
                      $this->db->query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
                      redirect(base_url());
                 }
+
+                logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Login', 'Login Module', 'Login successfully', 'Success', date('m-d-Y'));
 
                 $this->output->set_header("Location: " . base_url(), TRUE, 302);
             }
@@ -1501,7 +1504,7 @@ $sale=array();$product=array();
     #===============Logout=======#
 
     public function logout() {
-        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Logout', 'Users Logout', 'Logout Successfully', 'Logout', date('m-d-Y'));
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Logout', 'Users Logout', 'Logout Successfully', 'Logout', date('m-d-Y'));
         if ($this->auth->logout())
             $this->output->set_header("Location: " . base_url() . 'Admin_dashboard/login', TRUE, 302);
     }

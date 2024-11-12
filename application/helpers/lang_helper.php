@@ -155,7 +155,6 @@ if (!function_exists('logEntry')) {
             'c_time' => $formatted_time, 
         );
         $res = $ci->db->insert('log_entry', $data);
-        // echo $ci->db->last_query(); die;
         return true;
     }
 }

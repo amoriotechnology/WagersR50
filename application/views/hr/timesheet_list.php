@@ -49,12 +49,12 @@
                     $split=explode('-',$test);
                     if(trim($split[0])=='hrm' && $_SESSION['u_type'] ==3 && trim($split[1])=='1000'){
                     ?>
-                <a href="<?php echo base_url('Chrm/add_timesheet') ?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a> 
+                <a href="<?php echo base_url('Chrm/add_timesheet').'?id='.urlencode($_GET['id'])?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a> 
 
                 <?php break;}} 
                     if($_SESSION['u_type'] == 2) { 
                 ?>
-                <a href="<?php echo base_url('Chrm/add_timesheet') ?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a>
+                <a href="<?php echo base_url('Chrm/add_timesheet').'?id='.urlencode($_GET['id'])?>" class="btn btnclr dropdown-toggle" style="color:white;border-color: #2e6da4;height: fit-content;"><i class="far fa-file-alt"> </i> <?php echo ('Add Time Sheet') ?></a>
                 <?php  } ?>
                 </div>
                 <div class="col-md-6 col-sm-6" style="display: flex; justify-content: center; align-items: center;">
@@ -123,7 +123,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             [10, 25, 50, 100]
         ],
         "ajax": {
-            "url": "<?php echo base_url('Chrm/manageTimesheetListData'); ?>",
+            "url": "<?php echo base_url('Chrm/manageTimesheetListData?id='); ?>" +
+                encodeURIComponent('<?php echo $_GET['id']; ?>'),
             "type": "POST",
             "data": function(d) {
                 d['<?php echo $this->security->get_csrf_token_name(); ?>'] =

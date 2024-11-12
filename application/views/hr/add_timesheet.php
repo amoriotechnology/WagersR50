@@ -213,12 +213,12 @@ td{
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height: 50px;">
                         <div class="panel-title">
-                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet') ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
                     <?php //echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
                     <!-- <form id="insert_timesheet"  method="post">   -->
-                <?php echo form_open_multipart('Chrm/pay_slip','id="validate"' ) ?>
+                <?php echo form_open_multipart('Chrm/pay_slip?id=' . $_GET['id'], 'id="validate"'); ?>
                   <?php  $id=random_int(100000, 999999); ?>
                   <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
                     <div class="panel-body">
@@ -228,6 +228,7 @@ td{
                                 <div class="col-sm-6">
                                     <input type="hidden" id="tsheet_id" value="<?php echo $id ; ?>" name="tsheet_id" />
                                     <input  type="hidden" readonly id="unique_id" value="<?php echo $this->session->userdata('unique_id') ?>" name="unique_id" />
+                                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                                     <select name="templ_name" id="templ_name" class="form-control"  required  tabindex="3" style="width:100;">
                                         <option value=""> <?php echo ('Select Employee Name') ?></option>
                                     <?php foreach($employee_name as $emp_name) { ?>

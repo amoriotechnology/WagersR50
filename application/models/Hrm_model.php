@@ -1922,12 +1922,12 @@ public function state_tax(){
         $this->db->where($employee_status,$federal_range);
         $this->db->where('created_by',$this->session->userdata('user_id'));
         $query = $this->db->get();
-
-      if ($query->num_rows() > 0) {
+// echo $this->db->last_query(); die;
+        if ($query->num_rows() > 0) {
             
            return $query->result_array();
         }else{
-  return 0;
+       return 0;
         }
 }
 
