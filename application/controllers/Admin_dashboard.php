@@ -1460,6 +1460,7 @@ $sale=array();$product=array();
                      redirect(base_url());
                 }
 
+                logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Login', 'Login Module', 'Login successfully', 'Success', date('m-d-Y'));
                 $this->output->set_header("Location: " . base_url(), TRUE, 302);
             }
 
@@ -1501,7 +1502,7 @@ $sale=array();$product=array();
     #===============Logout=======#
 
     public function logout() {
-        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('company_name'), 'Logout', 'Users Logout', 'Logout Successfully', 'Logout', date('m-d-Y'));
+        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Logout', 'Users Logout', 'Logout Successfully', 'Logout', date('m-d-Y'));
         if ($this->auth->logout())
             $this->output->set_header("Location: " . base_url() . 'Admin_dashboard/login', TRUE, 302);
     }
