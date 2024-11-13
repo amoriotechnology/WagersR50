@@ -258,7 +258,7 @@ tr.noBorder td {
                                              <td tabindex="0"  style="text-align: center;"  >1</td>
                                              <td style="padding-left: 19%;">Federal Income Tax &nbsp;&nbsp;
                                                 <span style="margin-left: 66%;">  
-                                                <a href="<?php echo base_url('Chrm/add_taxes_detail') ?>"  class="btn btnclr btn-sm federal_tax" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore"  aria-hidden="true"></i></a>
+                                                <a href="<?php echo base_url('Chrm/add_taxes_detail').'?id='.urlencode($_GET['id']).'&admin_id='.urlencode($_GET['admin_id']); ?>"  class="btn btnclr btn-sm federal_tax" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore"  aria-hidden="true"></i></a>
                                                 </span>
                                                 <input type="hidden" name="tax" id="federal_tax" value="Federal Income tax">
                                              </td>
@@ -267,7 +267,7 @@ tr.noBorder td {
                                              <td tabindex="0" style="text-align: center;" >2</td>
                                              <td  style="padding-left: 19%;" >Social Security
                                                 &nbsp;&nbsp;&nbsp;&nbsp;<span style="margin-left: 68%;">  
-                                                <a href="<?php echo base_url('Chrm/socialsecurity_detail') ?>"  class="btn btnclr btn-sm social_security" id="social_security" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
+                                                <a href="<?php echo base_url('Chrm/socialsecurity_detail').'?id='.urlencode($_GET['id']).'&admin_id='.urlencode($_GET['admin_id']); ?>"  class="btn btnclr btn-sm social_security" id="social_security" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
                                                 </span>
                                                 <input type="hidden" name="tax" id="social_security" value="Social Security">
                                              </td>
@@ -276,7 +276,7 @@ tr.noBorder td {
                                              <td tabindex="0" style="text-align: center;" >3</td>
                                              <td style="padding-left: 19%;" >Medicare &nbsp;&nbsp; 
                                                 <span style="margin-left: 72%;">  
-                                                   <a href="<?php echo base_url('Chrm/medicare_detail') ?>"  class="btn btnclr btn-sm medicare" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
+                                                   <a href="<?php echo base_url('Chrm/medicare_detail').'?id='.urlencode($_GET['id']).'&admin_id='.urlencode($_GET['admin_id']); ?>"  class="btn btnclr btn-sm medicare" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
                                                 </span>
                                              </td>
                                           </tr>
@@ -284,7 +284,7 @@ tr.noBorder td {
                                              <td tabindex="0" style="text-align: center;" >4</td>
                                              <td style="padding-left: 19%;" >Federal Unemployment &nbsp;&nbsp; 
                                                 <span style="margin-left: 64%;">  
-                                                   <a href="<?php echo base_url('Chrm/federalunemployment_detail') ?>"  class="btn btnclr btn-sm federal_unemployment" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
+                                                   <a href="<?php echo base_url('Chrm/federalunemployment_detail').'?id='.urlencode($_GET['id']).'&admin_id='.urlencode($_GET['admin_id']); ?>"  class="btn btnclr btn-sm federal_unemployment" data-toggle="tooltip" data-placement="left" title="" data-original-title="Add Taxes Detail"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
                                                 </span>
                                              </td>
                                           </tr>
@@ -348,19 +348,26 @@ tr.noBorder td {
                            
                                     foreach ($splt as $sp) {
                                        if (!empty($sp) && $sp !== ',') {
-                                          $sp_url = str_replace(" "," ", $sp);
-                                          echo "<tr>
-                                             <td style='display:none; border: 1px solid #d7d4d6;    background: white;' class='state_name'>". $states_list[$i]['state']."</td>
-                                             <td style='width:450px;    text-align: center;' class='tax_value'>".$sp."</td>
-                                             <td>                                                                     
-                                                <a  href=".base_url('Chrm/add_state_taxes_detail?tax='.urlencode($states_list[$i]['state'])."-".urlencode($sp_url))." class='btn btnclr btn-sm' data-toggle='tooltip' data-placement='left'  data-original-title='Add Taxes Detail'><i class='fa fa-window-restore' aria-hidden='true'></i></a>
-                                                <a  class='delete_item btn btnclr btn-sm' ><i class='fa fa-trash' aria-hidden='true'></i></a>                 
-                                             </td>
-                                          </tr>                                            
-                                          </td>";
-                                       } else {
+                                        $sp_url = str_replace(" ", " ", $sp);
+                                        echo "<tr>
+                                                <td style='display:none; border: 1px solid #d7d4d6; background: white;' class='state_name'>" . $states_list[$i]['state'] . "</td>
+                                                <td style='width:450px; text-align: center;' class='tax_value'>" . $sp . "</td>
+                                                <td>
+                                                    <a href='" . base_url('Chrm/add_state_taxes_detail?id=' . urlencode($_GET['id']) . '&admin_id=' . urlencode($_GET['admin_id']) . '&tax=' . urlencode($states_list[$i]['state']) . "-" . urlencode($sp_url)) . "' 
+                                                       class='btn btnclr btn-sm' 
+                                                       data-toggle='tooltip' 
+                                                       data-placement='left'  
+                                                       data-original-title='Add Taxes Detail'>
+                                                       <i class='fa fa-window-restore' aria-hidden='true'></i>
+                                                    </a>
+                                                    <a class='delete_item btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'>
+                                                        <i class='fa fa-trash' aria-hidden='true'></i>
+                                                    </a>
+                                                </td>
+                                              </tr>";
+                                    }else {
                                           echo "<tr><td style='display:none ;border: 1px solid #d7d4d6;    background: white;' class='state_name'>". $states_list[$i]['state']."</td><td style='width:485px;' style='display:none'>&nbsp</td> <td>  
-                                          <a class='delete_item btn btnclr btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr></td>";
+                                          <a class='delete_item btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr></td>";
                                           break;
                                        }
                                     }
@@ -420,10 +427,10 @@ tr.noBorder td {
                                           if(!empty($sp) && $sp !==','){
                                              $sp_url= str_replace(" "," ",$sp);
                                              echo "<tr ><td style='display:none;' class='citystate_name'>". $city_list[$i]['state']."</td><td style='width:450px;text-align: center;' class='citytax_value'>".$sp."</td> <td>  <a  href=".base_url('Chrm/add_state_taxes_detail?tax='.urlencode($city_list[$i]['state'])."-".urlencode($sp_url))." class='btn btnclr btn-sm' data-toggle='tooltip' data-placement='left'  data-original-title='Add Taxes Detail'><i class='fa fa-window-restore' aria-hidden='true'></i></a>
-                                             <a class='delete_item_city btn btnclr btn-sm' ><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
+                                             <a class='delete_item_city btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
                                           } else {
                                              echo "<tr><td style='display:none' class='citystate_name'>". $city_list[$i]['state']."</td><td style='width:485px;' style='display:none'>&nbsp</td> <td>  
-                                             <a   class='delete_item_city btn btnclr btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
+                                             <a class='delete_item_city btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
                                              break;
                                           }
                                        }
@@ -486,10 +493,10 @@ tr.noBorder td {
                                           if(!empty($sp) && $sp !==','){
                                              $sp_url= str_replace(" "," ",$sp);
                                              echo "<tr><td style='display:none' class='county_name'>". $county_list[$i]['state']."</td><td style='width:450px;text-align:center;' class='countytax_value'>".$sp."</td> <td>  <a  href=".base_url('Chrm/add_state_taxes_detail?tax='.urlencode($county_list[$i]['state'])."-".urlencode($sp_url))." class='btn btnclr btn-sm' data-toggle='tooltip' data-placement='left'  data-original-title='Add Taxes Detail'><i class='fa fa-window-restore' aria-hidden='true'></i></a>
-                                                <a  class='delete_itemcounty btn btnclr btn-sm' ><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
+                                                <a  class='delete_itemcounty btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
                                           } else {
                                              echo "<tr><td style='display:none' class='county_name'>". $county_list[$i]['state']."</td><td style='width:485px;' style='display:none'>&nbsp</td> <td>  
-                                             <a   class='delete_itemcounty btn btnclr btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
+                                             <a   class='delete_itemcounty btn btnclr btn-sm' onclick='return confirm('Are you sure you want to delete this?');'><i class='fa fa-trash' aria-hidden='true'></i></a>     </td></tr></td>";
                                              break;
                                           }
                                        }
@@ -526,6 +533,7 @@ tr.noBorder td {
             <div class="panel-body">
                <form method="post">
                 <input type="hidden" class="txt_csrfname" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+
                <div class="form-group row">
                   <label for="customer_name" class="col-sm-3 col-form-label">Add City<i class="text-danger">*</i></label>
                   <div class="col-sm-7">
@@ -594,10 +602,16 @@ tr.noBorder td {
             <?php echo form_open('Chrm/add_state', array('class' => 'form-vertical', 'id' => 'newcustomer')) ?>
             <div class="panel-body">
                <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
+               <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+               <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                <div class="form-group row">
                   <label for="customer_name" class="col-sm-3 col-form-label">State Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
                      <input class="form-control" name ="state_name" id="" type="text" placeholder="State Name"  required="" tabindex="1">
+
+                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
+
                   </div>
                </div>
             </div>
@@ -643,6 +657,10 @@ tr.noBorder td {
                   <label for="customer_name" class="col-sm-3 col-form-label">Tax Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
                      <input class="form-control" name ="state_tax_name" id="" type="text" placeholder="State Tax Name"  required="" tabindex="1">
+
+                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
+
                   </div>
                </div>
             </div>
@@ -674,6 +692,8 @@ tr.noBorder td {
             <?php echo form_open('Chrm/add_city', array('class' => 'form-vertical', 'id' => 'newcustomer')) ?>
             <div class="panel-body">
                <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
+               <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+               <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                <div class="form-group row">
                   <label for="customer_name" class="col-sm-3 col-form-label">City Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
@@ -722,6 +742,8 @@ tr.noBorder td {
                   <label for="customer_name" class="col-sm-3 col-form-label">City Tax Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
                      <input class="form-control" name ="city_tax_name" id="" type="text" placeholder="City Tax Name"  required="" tabindex="1">
+                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                   </div>
                </div>
             </div>
@@ -757,6 +779,8 @@ tr.noBorder td {
                   <label for="customer_name" class="col-sm-3 col-form-label">County Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
                      <input class="form-control" name ="county" id="" type="text" placeholder="County Name"  required="" tabindex="1">
+                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                   </div>
                </div>
             </div>
@@ -802,6 +826,8 @@ tr.noBorder td {
                   <label for="customer_name" class="col-sm-3 col-form-label">County Tax Name<i class="text-danger">*</i></label>
                   <div class="col-sm-6">
                      <input class="form-control" name ="county_tax_name" id="" type="text" placeholder="County Tax Name"  required="" tabindex="1">
+                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                   </div>
                </div>
             </div>
@@ -1009,25 +1035,27 @@ tr.noBorder td {
   $(".delete_item_city").click(function () {
     var citytax = $(this).closest('tr').find('td.citytax_value').text();
     var city = $(this).closest('tr').find('td.citystate_name').text();
-    
-    var dataString = {
-        citytax: citytax,
-        city: city,
-        <?= $this->security->get_csrf_token_name(); ?>: '<?= $this->security->get_csrf_hash(); ?>'
-    };
 
-    $.ajax({
-        type: "POST",
-        url: '<?= base_url(); ?>Chrm/citydelete_tax',
-        data: dataString,
-        success: function (data) {
-            location.reload();
-        },
-        error: function () {
-            // Handle error if needed
-        }
-    });
+    if (confirm("Are you sure you want to delete this?")) {
+        var dataString = {
+            citytax: citytax,
+            city: city,
+            <?= $this->security->get_csrf_token_name(); ?>: '<?= $this->security->get_csrf_hash(); ?>'
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '<?= base_url(); ?>Chrm/citydelete_tax',
+            data: dataString,
+            success: function (data) {
+               location.reload();
+            },
+            error: function () {
+            }
+        });
+    }
 });
+
 
 
 
@@ -1037,7 +1065,7 @@ $(".delete_itemcounty").click(function () {
     
    //  alert(countytax);
    //  alert(county);
-
+   if (confirm("Are you sure you want to delete this?")) {
     var dataString = {
       countytax: countytax,
       county: county,
@@ -1055,6 +1083,7 @@ $(".delete_itemcounty").click(function () {
             // Handle error if needed
         }
     });
+   }
 });
 
 

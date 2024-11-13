@@ -883,7 +883,7 @@
                <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span>
             </a>
             <ul class="treeview-menu">
-               <li class="treeview  "><a href="<?= base_url('Chrm/payroll_setting'); ?>">Payroll Setting</a></li>
+               <li class="treeview"> <a href="<?= base_url('Chrm/payroll_setting?id=' . $encode_com_id . '&admin_id=' . $encode_admin_id); ?>">Payroll Setting</a> </li>
                <li class="treeview  "><a href="<?= base_url('Chrm/payslip_setting'); ?>">Payslip Setting</a></li>                   
                <li class="treeview  "><a href="<?= base_url('Company_setup/manage_company'); ?>">Manage My Company</a></li>
                <li class="treeview  "><a href="<?= base_url('Chrm/week_setting'); ?>">Week Setting</a></li>

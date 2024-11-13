@@ -141,6 +141,8 @@ tbody tr td:first-child:before
 
 <input type="hidden" name="url" value="<?php echo  $this->uri->segment(2);  ?>"/>
 <input type="hidden" name="tax_name" value="Medicare"/>
+<input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+<input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
 
 
 

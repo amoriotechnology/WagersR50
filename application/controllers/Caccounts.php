@@ -347,12 +347,17 @@ if ($this->db->field_exists($txd, 'quotation_taxinfo')) {
         $result = $this->Accounts->delete_payrolldata($id);
     }
 
-    public function create_tax_federal(){
+    public function create_tax_federal()
+    {
       
 
-  $tax_name= $this->input->post('tax_name',TRUE);
-   $url= $this->input->post('url',TRUE);
-$year = date("Y"); 
+        $tax_name= $this->input->post('tax_name',TRUE);
+        $url= $this->input->post('url',TRUE);
+        $year = date("Y"); 
+
+        $user_id = $this->input->post('admin_company_id');
+        $decodedId = decodeBase64UrlParameter($user_id);
+        $companyId = $this->input->post('adminId');
 
         $start_amount = $this->input->post('employer',TRUE);
         $end_amount = $this->input->post('employee',TRUE);
@@ -400,7 +405,7 @@ $year = date("Y");
                 'married' => $mfrom."-".$mto,
                 'head_household' => $hhfrom."-".$hhto,
                 'tax'  =>$tax_name,
-               'created_by'       => $this->session->userdata('user_id')
+               'created_by'       => $decodedId 
              
         );
 
@@ -420,7 +425,7 @@ $year = date("Y");
 
             }
             $this->session->set_flashdata('message', display('save_successfully'));
-            redirect("Chrm/payroll_setting"); 
+            redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId)); 
     }
 
     #==============TAX Entry==============#
@@ -917,6 +922,9 @@ $year = date("Y");
         $tname = $this->input->post('tax_name',TRUE);
         $tax_name= str_replace("_"," ",$tname);
         $year = date("Y");
+        $user_id      = $this->input->post('admin_company_id',TRUE); 
+        $decodedId      = decodeBase64UrlParameter($user_id);
+        $companyId      = $this->input->post('adminId',TRUE); 
         $start_amount = $this->input->post('employer',TRUE);
         $end_amount = $this->input->post('employee',TRUE);
         $details = $this->input->post('details',TRUE);
@@ -982,11 +990,11 @@ $year = date("Y");
         }
 
         $this->session->set_flashdata('message', display('save_successfully'));
-        redirect("Chrm/payroll_setting");
+        redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
         if (empty($data1)) {
-            redirect("Chrm/payroll_setting");
+            redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
         }else{
-            redirect("Chrm/payroll_setting");
+            redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
         }
     }
 }

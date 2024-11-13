@@ -94,9 +94,11 @@
 
   
                <div class="panel-body">
-                  <?php echo  form_open('Caccounts/create_tax_setup') ?>
+                  <?php echo  form_open('Caccounts/create_tax_setup?type=hourly') ?>
                   <input type="hidden" class="txt_csrfname" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                   <input type="hidden" name="tax_name" value="<?php echo $_GET['tax'];  ?>"/>
+                  <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
+                  <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                   <table class="table table-bordered table-hover"   id="POITable"  border="0">
                      <thead>
                         <tr class="btnclr" >

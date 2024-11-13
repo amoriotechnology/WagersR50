@@ -5857,17 +5857,21 @@ public function payslipIndexData()
 public function add_state(){
   $CI = & get_instance();
 $state_name = $this->input->post('state_name');
+$userId = $this->input->post('admin_company_id');
+$decodedId = decodeBase64UrlParameter($userId);
+$companyId = $this->input->post('adminId');
+
         $data=array(
              'state' => $state_name,
              'Type' =>'State',
-             'created_by' => $this->session->userdata('user_id')
+             'created_by' => $decodedId
         );
 
        logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Federal Taxes', 'Human Resource', 'New State Added Successfully', 'Add', date('m-d-Y'));
 
       $this->db->insert('state_and_tax', $data);
       $this->session->set_userdata(array('message' => 'New State Added Successfully'));
-     redirect("Chrm/payroll_setting");
+     redirect(base_url('Chrm/payroll_setting?id=' . $userId . '&admin_id=' . $companyId));
 }
 public function add_state_tax(){
     $CI = & get_instance();
@@ -5875,17 +5879,19 @@ public function add_state_tax(){
     $st_code = explode("-", $tx);
     $state_code = trim($st_code[1]);
     $selected_state = $this->input->post('selected_state');
-    $user_id = $this->session->userdata('user_id');
+    $user_id = $this->input->post('admin_company_id');
+    $decodedId = decodeBase64UrlParameter($user_id);
+    $companyId = $this->input->post('adminId');
     $this->db->where('state', $selected_state);
     $this->db->set('tax', "CONCAT(tax,',','".$tx."')", FALSE);
     $this->db->update('state_and_tax');
 
     logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), '', '', $this->session->userdata('userName'), 'Federal Taxes', 'Human Resource', 'New Tax Has been assigned Successfully', 'Add', date('m-d-Y'));
 
-    $sql1 = "UPDATE state_and_tax SET state_code = '$state_code', tax = TRIM(BOTH ',' FROM tax) WHERE state = '$selected_state' AND created_by = '$user_id'";
+    $sql1 = "UPDATE state_and_tax SET state_code = '$state_code', tax = TRIM(BOTH ',' FROM tax) WHERE state = '$selected_state' AND created_by = '$decodedId'";
     $this->db->query($sql1);
     $this->session->set_userdata(array('message' =>'New Tax Has been assigned Successfully'));
-    redirect("Chrm/payroll_setting");
+    redirect(base_url('Chrm/payroll_setting?id=' . $user_id . '&admin_id=' . $companyId));
 }
 
 public function add_designation_data(){
@@ -6107,13 +6113,15 @@ public function add_state_taxes_detail($tax=null)
     // $tax = urldecode($_GET['tax']);
     $url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $parts = parse_url($url);
+    $user_id      = isset($_GET['id']) ? $_GET['id'] : null;
+    $decodedId      = decodeBase64UrlParameter($user_id);
    // print_r($parts); die;
     parse_str($parts['query'], $query);
     
      $data['taxinfo'] = $this->db->select("*")
      ->from('state_localtax')
      ->where('tax',$query['tax'])
-     ->where('create_by',$this->session->userdata('user_id') )
+     ->where('create_by',$decodedId)
      ->get()->result_array();
     
 //
@@ -6121,7 +6129,7 @@ public function add_state_taxes_detail($tax=null)
     $data['weekly_taxinfo'] = $this->db->select("*")
     ->from('weekly_tax_info')
    ->where('tax','Weekly '.$query['tax'])
-      ->where('create_by',$this->session->userdata('user_id') )
+      ->where('create_by',$decodedId)
     ->get()
     ->result_array();
 
@@ -6129,7 +6137,7 @@ public function add_state_taxes_detail($tax=null)
     $data['biweekly_taxinfo'] = $this->db->select("*")
     ->from('biweekly_tax_info')
     ->where('tax','BIWeekly '.$query['tax'])
-    ->where('create_by',$this->session->userdata('user_id') )
+    ->where('create_by',$decodedId)
     ->get()
     ->result_array();
  
@@ -6138,7 +6146,7 @@ public function add_state_taxes_detail($tax=null)
     $data['monthly_taxinfo'] = $this->db->select("*")
     ->from('monthly_tax_info')
     ->where('tax','Monthly '.$query['tax'])
-      ->where('create_by',$this->session->userdata('user_id') )
+      ->where('create_by',$decodedId)
     ->get()
     ->result_array();
 
@@ -6308,21 +6316,28 @@ $data['setting_detail'] = $setting_detail;
 
 
 public function add_city(){
-  $CI = & get_instance();
+$CI = & get_instance();
 $city_name = $this->input->post('city_name');
-        $data=array(
-             'state' => $city_name,
-             'Type' =>'City',
-             'created_by' => $this->session->userdata('user_id')
-        );
-      $this->db->insert('state_and_tax', $data);
-      $this->session->set_userdata(array('message' => 'New City Added Successfully'));
-     redirect("Chrm/payroll_setting");
+$userId = $this->input->post('admin_company_id');
+$decodedId = decodeBase64UrlParameter($userId);
+$companyId = $this->input->post('adminId');
+
+    $data=array(
+         'state' => $city_name,
+         'Type' =>'City',
+         'created_by' => $decodedId
+    );
+  $this->db->insert('state_and_tax', $data);
+  $this->session->set_userdata(array('message' => 'New City Added Successfully'));
+ redirect(base_url('Chrm/payroll_setting?id=' . $userId . '&admin_id=' . $companyId));
 }
   public function add_city_state_tax(){
   $CI = & get_instance();
   $selected_city = $this->input->post('selected_city');
   $citytax = $this->input->post('city_tax_name');
+  $userId = $this->input->post('admin_company_id');
+  $decodedId = decodeBase64UrlParameter($userId);
+  $companyId = $this->input->post('adminId');
  $this->db->where('state', $selected_city);
  $this->db->set('tax', "CONCAT(tax,',','".$citytax."')", FALSE);
  $this->db->update('state_and_tax');
@@ -6334,12 +6349,15 @@ $city_name = $this->input->post('city_name');
 //  echo $query1;
 //  .;
  $this->session->set_userdata(array('message' =>'New Tax Has been assigned Successfully'));
- redirect("Chrm/payroll_setting");
+ redirect(base_url('Chrm/payroll_setting?id=' . $userId . '&admin_id=' . $companyId));
 }
 public function add_county_tax(){
   $CI = & get_instance();
   $selected_county = $this->input->post('selected_county');
   $ctax = $this->input->post('county_tax_name');
+  $userId = $this->input->post('admin_company_id');
+  $decodedId = decodeBase64UrlParameter($userId);
+  $companyId = $this->input->post('adminId');
  $this->db->where('state', $selected_county);
  $this->db->set('tax', "CONCAT(tax,',','".$ctax."')", FALSE);
  $this->db->update('state_and_tax');
@@ -6348,20 +6366,23 @@ $sql1="UPDATE state_and_tax
 SET tax = TRIM(BOTH ',' FROM tax)";
 $query1=$this->db->query($sql1);
  $this->session->set_userdata(array('message' =>'New Tax Has been assigned Successfully'));
- redirect("Chrm/payroll_setting");
+ redirect(base_url('Chrm/payroll_setting?id=' . $userId . '&admin_id=' . $companyId));
 }
 public function add_county(){
   $CI = & get_instance();
-$county = $this->input->post('county');
+  $county = $this->input->post('county');
+  $userId = $this->input->post('admin_company_id');
+  $decodedId = decodeBase64UrlParameter($userId);
+  $companyId = $this->input->post('adminId');
         $data=array(
              'state' => $county,
-             'created_by' => $this->session->userdata('user_id'),
+             'created_by' => $decodedId,
              'Type' =>'County',
         );
       $this->db->insert('state_and_tax', $data);
       // echo $this->db->last_query(); .;
       $this->session->set_userdata(array('message' => 'New County Added Successfully'));
-     redirect("Chrm/payroll_setting");
+     redirect(base_url('Chrm/payroll_setting?id=' . $userId . '&admin_id=' . $companyId));
 }
 
 
